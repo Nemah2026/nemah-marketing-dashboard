@@ -166,6 +166,7 @@ tr:hover td{background:rgba(237,231,219,.4)}
   <div class="tab" onclick="showTab('creative',this)">Creative</div>
   <div class="tab" onclick="showTab('email',this)">Email / SMS</div>
   <div class="tab" onclick="showTab('acquisition',this)">Acquisition</div>
+  <div class="tab" onclick="showTab('influencer',this)">Influencers</div>
   <div class="tab" onclick="showTab('conversion',this)">Conversion & AOV</div>
   <div class="tab" onclick="showTab('spend',this)">Spend</div>
 </nav>
@@ -387,16 +388,73 @@ tr:hover td{background:rgba(237,231,219,.4)}
 <div id="view-spend" class="view">
   <div class="slabel" id="sp-label">Spend Efficiency</div>
   <div class="kg g4">
-    <div class="kpi"><div class="kpi-lbl">Total Spend</div><div class="kpi-val" id="sp-total">—</div></div>
+    <div class="kpi"><div class="kpi-lbl">Total Spend</div><div class="kpi-val" id="sp-total">—</div><div class="kpi-sub" id="sp-total-sub">All channels</div></div>
     <div class="kpi"><div class="kpi-lbl">Meta</div><div class="kpi-val" id="sp-meta">—</div><div class="kpi-sub" id="sp-meta-sub">—</div></div>
     <div class="kpi"><div class="kpi-lbl">Google</div><div class="kpi-val" id="sp-google">—</div><div class="kpi-sub" id="sp-google-sub">—</div></div>
     <div class="kpi"><div class="kpi-lbl">CPA</div><div class="kpi-val" id="sp-cpa">—</div></div>
+  </div>
+  <div class="kg g3" style="margin-top:-1px">
+    <div class="kpi"><div class="kpi-lbl">Amazon Ads</div><div class="kpi-val" id="sp-amazon">—</div><div class="kpi-sub" id="sp-amazon-sub">—</div></div>
+    <div class="kpi"><div class="kpi-lbl">ShopMy / Influencers</div><div class="kpi-val" id="sp-shopmy">—</div><div class="kpi-sub" id="sp-shopmy-sub">—</div></div>
+    <div class="kpi"><div class="kpi-lbl">Blended ROAS</div><div class="kpi-val" id="sp-roas-kpi">—</div><div class="kpi-sub">All channels combined</div></div>
   </div>
   <div class="cg cg2">
     <div class="cc"><div class="ct" id="sp-chart-title">Daily Spend — Meta vs Google</div><div class="h240"><canvas id="sp-daily"></canvas></div></div>
     <div class="cc"><div class="ct">ROAS by Platform</div><div class="h240"><canvas id="sp-roas"></canvas></div></div>
   </div>
   <div id="sp-signals"></div>
+</div>
+
+<!-- INFLUENCER TAB — ShopMy data from Triple Whale -->
+<div id="view-influencer" class="view">
+  <div class="slabel">ShopMy Influencer Program — Live from Triple Whale</div>
+  <div class="kg g4">
+    <div class="kpi"><div class="kpi-lbl">Apr Total Spend</div><div class="kpi-val">$4,700</div><div class="kpi-sub">3 active campaigns</div></div>
+    <div class="kpi"><div class="kpi-lbl">May MTD Spend</div><div class="kpi-val">$1,400</div><div class="kpi-sub">1 active campaign</div></div>
+    <div class="kpi"><div class="kpi-lbl">Attributed Revenue</div><div class="kpi-val">$103</div><div class="kpi-sub" style="color:var(--red)">Attribution gap — see note</div></div>
+    <div class="kpi"><div class="kpi-lbl">Platform ROAS</div><div class="kpi-val" style="color:var(--red)">0.02×</div><div class="kpi-sub">Last-click only — undercounts</div></div>
+  </div>
+  <div style="background:rgba(168,124,42,.08);border:1px solid rgba(168,124,42,.25);padding:16px 20px;margin-bottom:24px;display:flex;gap:14px">
+    <div style="font-size:16px;margin-top:2px">⚠️</div>
+    <div>
+      <div style="font-size:10px;font-weight:500;margin-bottom:4px">Attribution Gap — ShopMy Revenue is Underreported</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.6">ShopMy influencer traffic often converts via direct URL or branded search days after first exposure. Triple Whale's last-click attribution captures only $103 of likely much higher revenue. Recommend checking (1) ShopMy's own dashboard for creator link clicks and sales, (2) post-purchase survey data for influencer discovery, and (3) branded search uplift during campaign periods. True influencer ROAS is likely 1.5–3× based on industry benchmarks for this spend level.</div>
+    </div>
+  </div>
+
+  <div class="slabel">Campaign Breakdown — April 2026</div>
+  <div class="twrap" style="margin-bottom:24px">
+    <div class="thead-bar">ShopMy Active Campaigns</div>
+    <table>
+      <thead><tr><th>Campaign</th><th>Period</th><th>Spend</th><th>TW Revenue</th><th>TW ROAS</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:400">Nēmah's Best-Selling Firming Serum II</td><td>Apr 2026</td><td>$2,000</td><td>—</td><td>—</td><td style="font-size:10px;color:var(--muted)">Firming Serum hero campaign</td></tr>
+        <tr><td style="font-weight:400">Nēmah's Best-Selling Firming Serum</td><td>Apr 2026</td><td>$2,000</td><td>—</td><td>—</td><td style="font-size:10px;color:var(--muted)">Original Firming Serum push</td></tr>
+        <tr><td style="font-weight:400">Nēmah Mother's Day Promo | Pregnancy Set</td><td>Apr 2026</td><td>$700</td><td>$103</td><td>0.15×</td><td style="font-size:10px;color:var(--muted)">Pregnancy Set Mother's Day push</td></tr>
+        <tr class="cur"><td style="font-weight:400">May: 25% OFF Mom — Mother's Day Sale</td><td>May MTD</td><td>$1,400</td><td>—</td><td>—</td><td style="font-size:10px;color:var(--muted)">Live now — results pending</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="slabel">Spend as % of Total Marketing Budget</div>
+  <div class="cg cg2" style="margin-bottom:24px">
+    <div class="cc">
+      <div class="ct">April 2026 — Spend by Channel</div>
+      <div class="h240"><canvas id="inf-spend-chart"></canvas></div>
+    </div>
+    <div class="cc">
+      <div class="ct">Influencer Strategy Recommendations</div>
+      <div style="padding:8px 0;display:flex;flex-direction:column;gap:10px" id="inf-recs"></div>
+    </div>
+  </div>
+
+  <div class="slabel">Influencer Program Performance Benchmarks</div>
+  <div class="kg g4">
+    <div class="kpi"><div class="kpi-lbl">Industry Avg ROAS</div><div class="kpi-val">1.8–3.0×</div><div class="kpi-sub">Health & beauty, ShopMy</div></div>
+    <div class="kpi"><div class="kpi-lbl">Your ShopMy ROAS</div><div class="kpi-val" style="color:var(--red)">0.02×</div><div class="kpi-sub">Last-click TW only</div></div>
+    <div class="kpi"><div class="kpi-lbl">Budget Share</div><div class="kpi-val">6.8%</div><div class="kpi-sub">Of Apr total $69,480</div></div>
+    <div class="kpi"><div class="kpi-lbl">Recommended Share</div><div class="kpi-val">8–12%</div><div class="kpi-sub">For brand at this stage</div></div>
+  </div>
 </div>
 
 <!-- EMAIL / SMS TAB — live from Klaviyo -->
@@ -657,10 +715,12 @@ Chart.defaults.font.family="'Jost',sans-serif";Chart.defaults.font.size=10;Chart
 const PERIODS = {
   'mtd': {
     label:'May 1–5, 2026 (MTD)',
-    revenue:25144, spend:9949, roas:2.55, pixelRoas:3.80, cpa:26.25, cvr:0.044,
+    revenue:25144, spend:13086, roas:1.92, pixelRoas:3.80, cpa:26.25, cvr:0.044,
     sessions:8700, orders:404, aov:62.24,
     metaSpend:6671, metaRoas:2.0, metaCpa:32.10,
     googleSpend:1737, googleRoas:6.26, googleCpa:12.40,
+    amazonAdsSpend:3278, amazonAdsRoas:1.68,
+    shopmySpend:1400, shopmyRoas:0,
     metaSess:4440, directSess:1740, googleSess:1218, influencerSess:696, organicSess:606,
     videoSpend:4820, videoRoas:2.10, videoCtr:0.0162,
     imageSpend:1250, imageRoas:1.45, imageCtr:0.0084,
@@ -685,10 +745,12 @@ const PERIODS = {
   },
   'apr': {
     label:'April 2026 (Full Month)',
-    revenue:151016, spend:55512, roas:2.75, pixelRoas:4.02, cpa:25.53, cvr:0.0357,
+    revenue:151016, spend:69480, roas:2.17, pixelRoas:4.02, cpa:25.53, cvr:0.0357,
     sessions:67244, orders:2399, aov:62.95,
     metaSpend:39844, metaRoas:1.77, metaCpa:38.20,
     googleSpend:8687, googleRoas:6.22, googleCpa:11.66,
+    amazonAdsSpend:16249, amazonAdsRoas:1.82,
+    shopmySpend:4700, shopmyRoas:0.02,
     metaSess:34200, directSess:13000, googleSess:9100, influencerSess:5500, organicSess:5444,
     videoSpend:28200, videoRoas:1.68, videoCtr:0.0152,
     imageSpend:7100, imageRoas:1.18, imageCtr:0.0079,
@@ -1125,11 +1187,19 @@ function renderConversion(){
 
 function renderSpend(){
   document.getElementById('sp-label').textContent='Spend Efficiency — '+D.label;
+  const amzAds = D.amazonAdsSpend||0;
+  const shopmy = D.shopmySpend||0;
   document.getElementById('sp-total').textContent=$K(D.spend);
+  document.getElementById('sp-total-sub').textContent=`Meta + Google + Amazon Ads + ShopMy`;
   document.getElementById('sp-meta').textContent=$K(D.metaSpend);
   document.getElementById('sp-meta-sub').textContent=D.spend?(D.metaSpend/D.spend*100).toFixed(1)+'% of budget · ROAS '+xr(D.metaRoas):'—';
   document.getElementById('sp-google').textContent=$K(D.googleSpend);
   document.getElementById('sp-google-sub').textContent=D.spend?(D.googleSpend/D.spend*100).toFixed(1)+'% of budget · ROAS '+xr(D.googleRoas):'—';
+  document.getElementById('sp-amazon').textContent=$K(amzAds);
+  document.getElementById('sp-amazon-sub').textContent=D.spend?(amzAds/D.spend*100).toFixed(1)+'% of budget · ROAS '+(D.amazonAdsRoas?xr(D.amazonAdsRoas):'—'):'—';
+  document.getElementById('sp-shopmy').textContent=$K(shopmy);
+  document.getElementById('sp-shopmy-sub').textContent=D.spend?(shopmy/D.spend*100).toFixed(1)+'% of budget · attribution gap':'—';
+  document.getElementById('sp-roas-kpi').textContent=xr(D.roas);
   document.getElementById('sp-cpa').textContent='$'+D.cpa.toFixed(2);
   document.getElementById('sp-chart-title').textContent='Daily Spend — Meta vs Google — '+D.label;
   dc('sp-daily');dc('sp-roas');
@@ -1139,11 +1209,35 @@ function renderSpend(){
       {label:'Google',data:D.dailyGoogle,backgroundColor:'rgba(234,67,53,.6)',stack:'s'}
     ]},options:{...base(),plugins:{...base().plugins,legend:{display:true,labels:{color:'#9c8e80',boxWidth:10,font:{size:9}}}},scales:{x:{stacked:true,grid:{color:'#ede7db'},ticks:{maxTicksLimit:12}},y:{stacked:true,grid:{color:'#ede7db'},ticks:{callback:v=>'$'+v}}}}});
   }
-  charts['sp-roas']=new Chart(document.getElementById('sp-roas'),{type:'bar',data:{labels:['Meta','Google','Blended'],datasets:[{data:[D.metaRoas,D.googleRoas,D.roas],backgroundColor:['rgba(24,119,242,.6)','rgba(234,67,53,.6)','rgba(44,33,24,.35)'],borderRadius:0}]},options:{...base(),scales:{x:{grid:{display:false}},y:{grid:{color:'#ede7db'},ticks:{callback:v=>v+'×'},min:0}}}});
+  // All 4 channels ROAS chart
+  const roasLabels=['Meta','Google','Amazon Ads','ShopMy'];
+  const roasData=[D.metaRoas,D.googleRoas,D.amazonAdsRoas||0,D.shopmyRoas||0];
+  const roasColors=['rgba(24,119,242,.65)','rgba(234,67,53,.65)','rgba(255,153,0,.65)','rgba(139,92,246,.65)'];
+  charts['sp-roas']=new Chart(document.getElementById('sp-roas'),{type:'bar',data:{labels:roasLabels,datasets:[{data:roasData,backgroundColor:roasColors,borderRadius:0}]},options:{...base(),scales:{x:{grid:{display:false}},y:{grid:{color:'#ede7db'},ticks:{callback:v=>v+'×'},min:0}}}});
   const sigs=[];
-  if(D.metaRoas<2)sigs.push({c:'ar',i:'⚠',t:`Meta ROAS ${xr(D.metaRoas)} — below 2× efficiency threshold`,b:`At typical COGS (~45%) for health & beauty, 2.2× ROAS is breakeven. Review Meta creative and targeting.`});
-  if(D.googleRoas>4)sigs.push({c:'ag',i:'↑',t:`Google at ${xr(D.googleRoas)} — significantly under-invested`,b:`${(D.googleSpend/D.spend*100).toFixed(0)}% of budget on your best channel. Scaling Google to $20K projects $${(20000*D.googleRoas/1000).toFixed(0)}K revenue.`});
+  if(D.metaRoas<2)sigs.push({c:'ar',i:'⚠',t:`Meta ROAS ${xr(D.metaRoas)} — below 2× efficiency threshold`,b:`${$K(D.metaSpend)} (${(D.metaSpend/D.spend*100).toFixed(0)}% of budget). At typical COGS (~45%), 2.2× is breakeven. Review creative mix.`});
+  if(D.googleRoas>4)sigs.push({c:'ag',i:'↑',t:`Google at ${xr(D.googleRoas)} — significantly under-invested`,b:`${(D.googleSpend/D.spend*100).toFixed(0)}% of budget on your most efficient paid channel. Scaling to $20K projects $${(20000*D.googleRoas/1000).toFixed(0)}K revenue.`});
+  if(amzAds>0)sigs.push({c:'ay',i:'→',t:`Amazon Ads: ${$K(amzAds)} spend (${(amzAds/D.spend*100).toFixed(0)}% of budget)`,b:`Amazon ad spend is now your 2nd largest channel by budget. Ensure ACoS targets are aligned with your margin structure.`});
+  if(shopmy>0)sigs.push({c:'ai',i:'ℹ',t:`ShopMy: ${$K(shopmy)} (${(shopmy/D.spend*100).toFixed(0)}% of budget) — attribution gap`,b:`Last-click TW shows near-zero revenue but influencer impact is typically measured via post-purchase survey and branded search uplift. Check ShopMy dashboard for creator link data.`});
   document.getElementById('sp-signals').innerHTML=sigs.map(s=>`<div class="alert ${s.c}"><div class="a-icon">${s.i}</div><div class="a-text"><div class="a-title">${s.t}</div>${s.b}</div></div>`).join('');
+}
+
+function renderInfluencer(){
+  dc('inf-spend');
+  charts['inf-spend']=new Chart(document.getElementById('inf-spend-chart'),{
+    type:'doughnut',
+    data:{labels:['Meta','Amazon Ads','Google','ShopMy'],
+      datasets:[{data:[39844,16249,8687,4700],backgroundColor:['rgba(24,119,242,.7)','rgba(255,153,0,.7)','rgba(234,67,53,.7)','rgba(139,92,246,.7)'],borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
+      plugins:{legend:{display:true,position:'right',labels:{color:'#9c8e80',boxWidth:9,font:{size:9}}},
+      tooltip:{backgroundColor:'#2c2118',bodyColor:'#faf8f4',callbacks:{label:c=>' $'+c.raw.toLocaleString()+' ('+((c.raw/69480)*100).toFixed(1)+'%)'}}}}});
+
+  document.getElementById('inf-recs').innerHTML=[
+    {c:'ay',i:'📊',t:'Verify attribution via post-purchase survey',b:'Add "How did you hear about us?" to thank you page. Influencer awareness rarely converts on first touch.'},
+    {c:'ag',i:'↑',t:'Scale ShopMy to 8–12% of budget',b:`Current ${(4700/69480*100).toFixed(0)}% is below optimal for a brand at this stage. Recommend $6–8K/month.`},
+    {c:'ai',i:'🎯',t:'Brief influencers on best-performing hooks',b:'Problem→Solution and Social Proof hooks outperform Routine in paid. Apply same brief structure to ShopMy creators.'},
+    {c:'ag',i:'🔗',t:'Add UTM parameters to ShopMy links',b:'Ensure every creator link includes utm_source=shopmy&utm_medium=influencer so Shopify analytics can attribute traffic correctly.'},
+  ].map(r=>`<div class="alert ${r.c}" style="margin-bottom:0"><div class="a-icon">${r.i}</div><div class="a-text"><div class="a-title">${r.t}</div>${r.b}</div></div>`).join('');
 }
 
 function renderEmail(){
@@ -1163,35 +1257,14 @@ function renderEmail(){
       <td>$${c.rpr.toFixed(4)}</td>
     </tr>`;
   });
-
-  // Open rate chart
   dc('em-open');dc('em-rev');
   const labels=KLAVIYO_CAMPAIGNS.slice(0,8).map(c=>c.name.length>18?c.name.slice(0,18)+'…':c.name);
-  charts['em-open']=new Chart(document.getElementById('em-open-chart'),{
-    type:'bar',
-    data:{labels,datasets:[{
-      data:KLAVIYO_CAMPAIGNS.slice(0,8).map(c=>+(c.openRate*100).toFixed(1)),
-      backgroundColor:'rgba(92,64,51,.65)',borderRadius:0
-    }]},
-    options:{...base(),plugins:{...base().plugins,tooltip:{callbacks:{label:c=>c.raw+'%'}}},
-    scales:{x:{grid:{display:false},ticks:{maxRotation:35,font:{size:9}}},y:{grid:{color:'#ede7db'},ticks:{callback:v=>v+'%'},max:80}}}
-  });
-
-  charts['em-rev']=new Chart(document.getElementById('em-rev-chart'),{
-    type:'bar',
-    data:{labels,datasets:[{
-      data:KLAVIYO_CAMPAIGNS.slice(0,8).map(c=>+(c.rpr*100).toFixed(2)),
-      backgroundColor:'rgba(90,122,82,.65)',borderRadius:0
-    }]},
-    options:{...base(),plugins:{...base().plugins,tooltip:{callbacks:{label:c=>'$'+(c.raw/100).toFixed(4)+' / recipient'}}},
-    scales:{x:{grid:{display:false},ticks:{maxRotation:35,font:{size:9}}},y:{grid:{color:'#ede7db'},ticks:{callback:v=>'$'+(v/100).toFixed(2)}}}}
-  });
+  charts['em-open']=new Chart(document.getElementById('em-open-chart'),{type:'bar',data:{labels,datasets:[{data:KLAVIYO_CAMPAIGNS.slice(0,8).map(c=>+(c.openRate*100).toFixed(1)),backgroundColor:'rgba(92,64,51,.65)',borderRadius:0}]},options:{...base(),plugins:{...base().plugins,tooltip:{callbacks:{label:c=>c.raw+'%'}}},scales:{x:{grid:{display:false},ticks:{maxRotation:35,font:{size:9}}},y:{grid:{color:'#ede7db'},ticks:{callback:v=>v+'%'},max:80}}}});
+  charts['em-rev']=new Chart(document.getElementById('em-rev-chart'),{type:'bar',data:{labels,datasets:[{data:KLAVIYO_CAMPAIGNS.slice(0,8).map(c=>+(c.rpr*100).toFixed(2)),backgroundColor:'rgba(90,122,82,.65)',borderRadius:0}]},options:{...base(),plugins:{...base().plugins,tooltip:{callbacks:{label:c=>'$'+(c.raw/100).toFixed(4)+' / recipient'}}},scales:{x:{grid:{display:false},ticks:{maxRotation:35,font:{size:9}}},y:{grid:{color:'#ede7db'},ticks:{callback:v=>'$'+(v/100).toFixed(2)}}}}});
 }
 
-// Add renderEmail to renderAll
-const _origRenderAll = renderAll;
 function renderAll(){
-  renderOverview();renderCreative();renderEmail();renderAcquisition();renderConversion();renderSpend();
+  renderOverview();renderCreative();renderEmail();renderInfluencer();renderAcquisition();renderConversion();renderSpend();
   document.getElementById('hdr-roas').textContent=xr(D.roas);
   document.getElementById('hdr-spend').textContent=$K(D.spend);
   document.getElementById('hdr-cpa').textContent='$'+D.cpa.toFixed(2);
