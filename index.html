@@ -954,7 +954,9 @@ const base=(extra={})=>({responsive:true,maintainAspectRatio:false,
 function showTab(id,el){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById('view-'+id).classList.add('active');el.classList.add('active');
+  document.getElementById('view-'+id).classList.add('active');
+  el.classList.add('active');
+  if(id==='influencer') try{ renderInfluencer(); }catch(e){ console.warn('renderInfluencer',e); }
 }
 
 function setPeriod(key, el) {
@@ -1289,7 +1291,13 @@ function renderEmail(){
 }
 
 function renderAll(){
-  renderOverview();renderCreative();renderEmail();renderInfluencer();renderAcquisition();renderConversion();renderSpend();
+  try { renderOverview(); } catch(e){ console.warn('renderOverview error',e); }
+  try { renderCreative(); } catch(e){ console.warn('renderCreative error',e); }
+  try { renderEmail(); } catch(e){ console.warn('renderEmail error',e); }
+  try { renderAcquisition(); } catch(e){ console.warn('renderAcquisition error',e); }
+  try { renderConversion(); } catch(e){ console.warn('renderConversion error',e); }
+  try { renderSpend(); } catch(e){ console.warn('renderSpend error',e); }
+  // Influencer renders lazily on tab click to avoid hidden canvas issues
   document.getElementById('hdr-roas').textContent=xr(D.roas);
   document.getElementById('hdr-spend').textContent=$K(D.spend);
   document.getElementById('hdr-cpa').textContent='$'+D.cpa.toFixed(2);
