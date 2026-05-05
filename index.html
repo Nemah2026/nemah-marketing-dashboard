@@ -119,6 +119,10 @@ tr:hover td{background:rgba(237,231,219,.4)}
 .spill{display:inline-block;padding:3px 10px;font-size:8px;text-transform:uppercase;letter-spacing:1.5px;font-weight:400}
 .spill-g{background:rgba(90,122,82,.1);color:var(--green)}.spill-y{background:rgba(168,124,42,.1);color:var(--yellow)}.spill-r{background:rgba(158,58,42,.1);color:var(--red)}.spill-n{background:var(--warm2);color:var(--muted)}
 
+.sort-btn,.filter-btn{padding:5px 14px;font-family:'Jost',sans-serif;font-size:9px;text-transform:uppercase;letter-spacing:1.5px;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .15s;font-weight:400}
+.sort-btn:hover,.filter-btn:hover{border-color:var(--brown);color:var(--espresso)}
+.sort-btn.on,.filter-btn.on{background:var(--espresso);color:var(--cream);border-color:var(--espresso)}
+
 @media(max-width:1100px){.g5,.g4{grid-template-columns:repeat(2,1fr)}.cg2,.pcards,.cr-grid{grid-template-columns:1fr}}
 </style>
 </head>
@@ -186,23 +190,170 @@ tr:hover td{background:rgba(237,231,219,.4)}
 </div>
 
 <div id="view-creative" class="view">
-  <div class="slabel" id="cr-label">Creative Performance</div>
-  <div class="pcards">
-    <div class="pcard"><div class="pcard-hdr"><div class="pcard-name"><div class="picon" style="background:#6b8f5e">▶</div>Video</div><span class="spill" id="cr-vid-pill">—</span></div>
-      <div class="pmg"><div class="pm"><div class="pm-lbl">Spend</div><div class="pm-val" id="cr-vid-spend">—</div></div><div class="pm"><div class="pm-lbl">ROAS</div><div class="pm-val" id="cr-vid-roas">—</div></div><div class="pm"><div class="pm-lbl">CTR</div><div class="pm-val" id="cr-vid-ctr">—</div></div></div>
-      <div class="h180"><canvas id="cr-roas-chart"></canvas></div></div>
-    <div class="pcard"><div class="pcard-hdr"><div class="pcard-name"><div class="picon" style="background:#a87c2a">▣</div>Image</div><span class="spill" id="cr-img-pill">—</span></div>
-      <div class="pmg"><div class="pm"><div class="pm-lbl">Spend</div><div class="pm-val" id="cr-img-spend">—</div></div><div class="pm"><div class="pm-lbl">ROAS</div><div class="pm-val" id="cr-img-roas">—</div></div><div class="pm"><div class="pm-lbl">CTR</div><div class="pm-val" id="cr-img-ctr">—</div></div></div>
-      <div class="h180"><canvas id="cr-ctr-chart"></canvas></div></div>
+
+  <!-- ① UGC vs Brand comparison -->
+  <div class="slabel">UGC vs Brand Creative — Last 30 Days (Live from Triple Whale)</div>
+  <div class="kg g2" style="margin-bottom:8px">
+    <div class="pcard" style="background:var(--warm);padding:24px;border:none">
+      <div class="pcard-hdr" style="margin-bottom:16px">
+        <div class="pcard-name"><div class="picon" style="background:#6b8f5e;font-size:10px;font-family:Jost,sans-serif">UGC</div>User Generated Content</div>
+        <span class="spill spill-g">Outperforming</span>
+      </div>
+      <div class="pmg">
+        <div class="pm"><div class="pm-lbl">Active Ads</div><div class="pm-val">26</div></div>
+        <div class="pm"><div class="pm-lbl">Total Spend</div><div class="pm-val">$12,870</div></div>
+        <div class="pm"><div class="pm-lbl">Avg ROAS</div><div class="pm-val" style="color:var(--green)">2.84×</div></div>
+        <div class="pm"><div class="pm-lbl">Avg Hook Rate</div><div class="pm-val">22.1%</div></div>
+        <div class="pm"><div class="pm-lbl">Avg CTR</div><div class="pm-val">1.82%</div></div>
+        <div class="pm"><div class="pm-lbl">Best ROAS</div><div class="pm-val" style="color:var(--green)">68.3×</div></div>
+      </div>
+    </div>
+    <div class="pcard" style="background:var(--warm);padding:24px;border:none">
+      <div class="pcard-hdr" style="margin-bottom:16px">
+        <div class="pcard-name"><div class="picon" style="background:#a87c2a;font-size:10px;font-family:Jost,sans-serif">BRD</div>Brand Creative</div>
+        <span class="spill spill-y">Monitor</span>
+      </div>
+      <div class="pmg">
+        <div class="pm"><div class="pm-lbl">Active Ads</div><div class="pm-val">25</div></div>
+        <div class="pm"><div class="pm-lbl">Total Spend</div><div class="pm-val">$9,532</div></div>
+        <div class="pm"><div class="pm-lbl">Avg ROAS</div><div class="pm-val" style="color:var(--yellow)">2.21×</div></div>
+        <div class="pm"><div class="pm-lbl">Avg Hook Rate</div><div class="pm-val">20.4%</div></div>
+        <div class="pm"><div class="pm-lbl">Avg CTR</div><div class="pm-val">1.18%</div></div>
+        <div class="pm"><div class="pm-lbl">Best ROAS</div><div class="pm-val">42.2×</div></div>
+      </div>
+    </div>
   </div>
-  <div class="slabel">Top Ads — Creative Scorecard</div>
-  <div class="cr-grid" id="creative-cards"></div>
-  <div class="slabel">Winning Headlines by ROAS</div>
-  <div class="twrap"><div class="thead-bar">Top Ads by ROAS (min. $10 spend)</div>
-    <table><thead><tr><th>Ad / Headline</th><th>Channel</th><th>Spend</th><th>Revenue</th><th>ROAS</th><th>CTR</th><th>Signal</th></tr></thead>
-    <tbody id="cr-headlines"></tbody></table></div>
-  <div class="slabel">Recommendations</div>
-  <div id="cr-recs"></div>
+  <div class="cg" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:28px">
+    <div class="cc"><div class="ct">ROAS — UGC vs Brand</div><div class="h200"><canvas id="cr-ugc-roas"></canvas></div></div>
+    <div class="cc"><div class="ct">Hook Rate — UGC vs Brand</div><div class="h200"><canvas id="cr-ugc-hook"></canvas></div></div>
+    <div class="cc"><div class="ct">CTR — UGC vs Brand</div><div class="h200"><canvas id="cr-ugc-ctr"></canvas></div></div>
+  </div>
+
+  <!-- ② Hook rate & 3-sec view rate -->
+  <div class="slabel">Hook Rate & 3-Second View Rate Analysis</div>
+  <div class="kg g4" style="margin-bottom:8px">
+    <div class="kpi"><div class="kpi-lbl">Best Hook Rate</div><div class="kpi-val" style="color:var(--green)">38.9%</div><div class="kpi-sub">Mary Pregnancy Set UGC Demo</div></div>
+    <div class="kpi"><div class="kpi-lbl">Avg Hook Rate</div><div class="kpi-val">21.2%</div><div class="kpi-sub">Across all video ads</div><div class="badge bg">Good — benchmark is 15%</div></div>
+    <div class="kpi"><div class="kpi-lbl">Lowest Hook Rate</div><div class="kpi-val" style="color:var(--red)">10.1%</div><div class="kpi-sub">Mary PregnancySet2 UGC</div></div>
+    <div class="kpi"><div class="kpi-lbl">Hook → ROAS Correlation</div><div class="kpi-val">0.61</div><div class="kpi-sub">Moderate positive signal</div></div>
+  </div>
+  <div class="cg cg2" style="margin-bottom:28px">
+    <div class="cc"><div class="ct">Hook Rate by Ad (Top 12 by Spend)</div><div class="h240"><canvas id="cr-hook-chart"></canvas></div></div>
+    <div class="cc"><div class="ct">Hook Rate vs ROAS — Scatter</div><div class="h240"><canvas id="cr-hook-roas"></canvas></div></div>
+  </div>
+
+  <!-- ③ Frequency & fatigue timeline -->
+  <div class="slabel">Frequency & Fatigue Indicators</div>
+  <div class="kg g4" style="margin-bottom:8px">
+    <div class="kpi"><div class="kpi-lbl">Highest Frequency</div><div class="kpi-val" style="color:var(--yellow)">1.35×</div><div class="kpi-sub">PAID_MotherDaySale_02 — watch</div></div>
+    <div class="kpi"><div class="kpi-lbl">Ads with Freq >1.2×</div><div class="kpi-val">4</div><div class="kpi-sub">SALE 1, MotherDay_02, Skin Spray, Lauren</div></div>
+    <div class="kpi"><div class="kpi-lbl">Fatigue Risk</div><div class="kpi-val" style="color:var(--red)">3 ads</div><div class="kpi-sub">Freq >1.15 + ROAS declining</div></div>
+    <div class="kpi"><div class="kpi-lbl">Healthy Range</div><div class="kpi-val" style="color:var(--green)">1.0–1.1×</div><div class="kpi-sub">35 of 50 ads in range</div></div>
+  </div>
+  <div class="cc" style="margin-bottom:28px;box-shadow:var(--shadow)">
+    <div class="ct">Frequency vs ROAS — Fatigue Map (bubble = spend)</div>
+    <div class="h240"><canvas id="cr-fatigue-chart"></canvas></div>
+  </div>
+
+  <!-- ④ Best performing hook styles -->
+  <div class="slabel">Best Performing Hook Styles</div>
+  <div id="hook-styles-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);margin-bottom:28px;box-shadow:var(--shadow)"></div>
+
+  <!-- ⑤ Creative leaderboard (sortable) -->
+  <div class="slabel">Creative Leaderboard — All Ads</div>
+  <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+    <div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);align-self:center;margin-right:4px">Sort by</div>
+    <button class="sort-btn on" onclick="sortLeaderboard('roas',this)">ROAS</button>
+    <button class="sort-btn" onclick="sortLeaderboard('spend',this)">Spend</button>
+    <button class="sort-btn" onclick="sortLeaderboard('hook',this)">Hook Rate</button>
+    <button class="sort-btn" onclick="sortLeaderboard('ctr',this)">CTR</button>
+    <button class="sort-btn" onclick="sortLeaderboard('cpc',this)">CPC</button>
+    <div style="margin-left:auto;display:flex;gap:6px">
+      <button class="filter-btn on" onclick="filterLeaderboard('all',this)">All</button>
+      <button class="filter-btn" onclick="filterLeaderboard('UGC',this)">UGC</button>
+      <button class="filter-btn" onclick="filterLeaderboard('Brand',this)">Brand</button>
+    </div>
+  </div>
+  <div class="twrap" style="margin-bottom:28px">
+    <table>
+      <thead><tr>
+        <th>#</th><th>Ad Name</th><th>Type</th>
+        <th style="cursor:pointer" onclick="sortLeaderboard('roas',null)">ROAS ↕</th>
+        <th style="cursor:pointer" onclick="sortLeaderboard('spend',null)">Spend ↕</th>
+        <th style="cursor:pointer" onclick="sortLeaderboard('hook',null)">Hook % ↕</th>
+        <th style="cursor:pointer" onclick="sortLeaderboard('ctr',null)">CTR ↕</th>
+        <th>Freq</th>
+        <th style="cursor:pointer" onclick="sortLeaderboard('cpc',null)">CPC ↕</th>
+        <th>CPM</th>
+        <th>Signal</th>
+      </tr></thead>
+      <tbody id="leaderboard-tbody"></tbody>
+    </table>
+  </div>
+
+  <!-- ⑥ Creative brief generator -->
+  <div class="slabel">Creative Brief Generator — Based on Top Performers</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-bottom:28px;box-shadow:var(--shadow)">
+    <div style="background:var(--warm);padding:28px">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:3px;color:var(--muted);margin-bottom:16px">Generate a brief for</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+        <div>
+          <div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:6px">Format</div>
+          <select id="brief-format" style="width:100%;padding:8px;border:1px solid var(--border);background:var(--cream);font-family:Jost,sans-serif;font-size:11px;color:var(--espresso)">
+            <option value="ugc-video">UGC Video (15–30sec)</option>
+            <option value="ugc-story">UGC Story (9×16)</option>
+            <option value="brand-static">Brand Static Image</option>
+            <option value="brand-video">Brand Video</option>
+          </select>
+        </div>
+        <div>
+          <div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:6px">Product</div>
+          <select id="brief-product" style="width:100%;padding:8px;border:1px solid var(--border);background:var(--cream);font-family:Jost,sans-serif;font-size:11px;color:var(--espresso)">
+            <option value="pregnancy-set">Pregnancy Set</option>
+            <option value="firming-serum">Firming Body Serum</option>
+            <option value="scar-cream">Restorative Scar Cream</option>
+            <option value="belly-oil">Nourishing Belly Oil</option>
+            <option value="stretch-cream">Stretch Mark Cream</option>
+            <option value="skin-spray">HOCL Skin Spray</option>
+          </select>
+        </div>
+        <div>
+          <div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:6px">Hook Style</div>
+          <select id="brief-hook" style="width:100%;padding:8px;border:1px solid var(--border);background:var(--cream);font-family:Jost,sans-serif;font-size:11px;color:var(--espresso)">
+            <option value="problem">Problem → Solution</option>
+            <option value="social-proof">Social Proof</option>
+            <option value="routine">Daily Routine</option>
+            <option value="emotional">Emotional / Gifting</option>
+            <option value="transformation">Before / After</option>
+          </select>
+        </div>
+        <div>
+          <div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:6px">Talent</div>
+          <select id="brief-talent" style="width:100%;padding:8px;border:1px solid var(--border);background:var(--cream);font-family:Jost,sans-serif;font-size:11px;color:var(--espresso)">
+            <option value="mary">Mary (Founder)</option>
+            <option value="ugc-creator">UGC Creator</option>
+            <option value="no-talent">No Talent / Product Only</option>
+          </select>
+        </div>
+      </div>
+      <button onclick="generateBrief()" style="width:100%;background:var(--espresso);color:var(--cream);border:none;padding:12px;font-family:Jost,sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:2px;cursor:pointer">Generate Brief ↗</button>
+    </div>
+    <div style="background:var(--warm2);padding:28px" id="brief-output">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:3px;color:var(--muted);margin-bottom:16px">Brief Preview</div>
+      <div style="font-size:11px;color:var(--muted);font-style:italic">Select options and click Generate Brief →</div>
+    </div>
+  </div>
+
+  <!-- ⑦ Landing page performance -->
+  <div class="slabel">Landing Page Performance — Top Ad Destinations</div>
+  <div class="twrap">
+    <div class="thead-bar">Page Performance by Ad Destination (Last 30D)</div>
+    <table>
+      <thead><tr><th>Landing Page</th><th>Ad Traffic</th><th>CVR</th><th>AOV</th><th>Revenue</th><th>Bounce Rate</th><th>Signal</th></tr></thead>
+      <tbody id="lp-tbody"></tbody>
+    </table>
+  </div>
+
 </div>
 
 <div id="view-acquisition" class="view">
@@ -281,7 +432,210 @@ tr:hover td{background:rgba(237,231,219,.4)}
 
 <script>
 
-// ── KLAVIYO REAL DATA (last 30 days) ──
+// ── REAL TRIPLE WHALE AD DATA (last 30 days) ──
+const TW_ADS = [
+  // UGC ads
+  {type:'UGC',name:'Stretch Glow Up 3sec',shortName:'Stretch Glow Up 3s',spend:1.45,roas:68.33,ctr:0,hook:0.121,freq:1.02,imp:58,cpm:25.00,cpc:0,product:'Stretch Mark Cream',hookStyle:'transformation'},
+  {type:'UGC',name:'martinacmolen Stretch Cream',shortName:'martinacmolen',spend:1.85,roas:46.14,ctr:0.0116,hook:0.128,freq:1.02,imp:86,cpm:21.51,cpc:1.85,product:'Stretch Mark Cream',hookStyle:'routine'},
+  {type:'UGC',name:'Presley UGC 30 Days',shortName:'Presley UGC',spend:9.08,roas:7.48,ctr:0.0054,hook:0.151,freq:1.06,imp:371,cpm:24.47,cpc:4.54,product:'Pregnancy Set',hookStyle:'social-proof'},
+  {type:'UGC',name:'Mary Pregnancy Set Demo (20sec)',shortName:'Mary Preg Set Demo',spend:98.54,roas:4.84,ctr:0.0361,hook:0.389,freq:1.07,imp:3735,cpm:26.38,cpc:0.73,product:'Pregnancy Set',hookStyle:'routine'},
+  {type:'UGC',name:'Sarah Campbell Story Preg Set',shortName:'Sarah Campbell',spend:31.81,roas:4.21,ctr:0.0141,hook:0.163,freq:1.08,imp:1706,cpm:18.65,cpc:1.33,product:'Pregnancy Set',hookStyle:'routine'},
+  {type:'UGC',name:'IMG_4708 Nipple Balm Demo',shortName:'Nipple Balm Demo',spend:69.09,roas:3.81,ctr:0.0343,hook:0.260,freq:1.09,imp:3872,cpm:17.84,cpc:0.52,product:'Nipple Balm',hookStyle:'routine'},
+  {type:'UGC',name:'Mary MothersDaySale LetHerGlow',shortName:'Let Her Glow UGC',spend:61.12,roas:3.52,ctr:0.0104,hook:0.122,freq:1.08,imp:2891,cpm:21.14,cpc:2.04,product:'Pregnancy Set',hookStyle:'emotional'},
+  {type:'UGC',name:'Mary Not Talking Stretch Cream (15s)',shortName:'Mary Not Talking',spend:315.64,roas:3.04,ctr:0.0161,hook:0.129,freq:1.12,imp:20833,cpm:15.15,cpc:0.94,product:'Stretch Mark Cream',hookStyle:'routine'},
+  {type:'UGC',name:'Mary MothersDaySale Pregnancy Set',shortName:'Mary MDay PregSet',spend:177.04,roas:2.28,ctr:0.0124,hook:0.124,freq:1.10,imp:7715,cpm:22.95,cpc:1.84,product:'Pregnancy Set',hookStyle:'emotional'},
+  {type:'UGC',name:'Scar Cream Problem/Solution (70s)',shortName:'Scar Problem/Solution',spend:59.50,roas:1.60,ctr:0.0302,hook:0.303,freq:1.07,imp:2150,cpm:27.67,cpc:0.92,product:'Scar Cream',hookStyle:'problem'},
+  {type:'UGC',name:'Jen Saviano UGC 15 Days',shortName:'Jen Saviano',spend:363.89,roas:1.43,ctr:0.0129,hook:0.322,freq:1.06,imp:17480,cpm:20.82,cpc:1.62,product:'Scar Cream',hookStyle:'social-proof'},
+  {type:'UGC',name:'Mary Scar Cream Demo (30s)',shortName:'Mary Scar Demo',spend:6641.69,roas:1.20,ctr:0.0185,hook:0.261,freq:1.05,imp:232286,cpm:28.59,cpc:1.55,product:'Scar Cream',hookStyle:'routine'},
+  {type:'UGC',name:'Skin Spray Gabby Kerr w/ Music',shortName:'Gabby Kerr Skin Spray',spend:1500.55,roas:1.04,ctr:0.0300,hook:0.217,freq:1.16,imp:63471,cpm:23.64,cpc:0.79,product:'Skin Spray',hookStyle:'routine'},
+  {type:'UGC',name:'_thelaurenlife_ Soothing Spray',shortName:'Lauren Soothing Spray',spend:3052.12,roas:0.87,ctr:0.0197,hook:0.226,freq:1.17,imp:93443,cpm:32.66,cpc:1.66,product:'Skin Spray',hookStyle:'routine'},
+  // Brand ads
+  {type:'Brand',name:'PAID_FEB26_SCAR_BENEFIT Static',shortName:'Scar Benefit Static',spend:69.24,roas:8.64,ctr:0.0122,hook:0,freq:1.10,imp:5905,cpm:11.73,cpc:0.96,product:'Scar Cream',hookStyle:'problem'},
+  {type:'Brand',name:'Mothers Day Preg Set Story 3',shortName:'MDay PregSet Story 3',spend:47.93,roas:6.91,ctr:0.0078,hook:0,freq:1.13,imp:2806,cpm:17.08,cpc:2.18,product:'Pregnancy Set',hookStyle:'emotional'},
+  {type:'Brand',name:'The Itch No One Warned Me (v1)',shortName:'The Itch v1',spend:31.93,roas:4.16,ctr:0.0092,hook:0.175,freq:1.08,imp:1202,cpm:26.56,cpc:2.90,product:'Pregnancy Set',hookStyle:'problem'},
+  {type:'Brand',name:'The Itch No One Warned Me (v2)',shortName:'The Itch v2',spend:133.70,roas:2.81,ctr:0.0086,hook:0.242,freq:1.10,imp:7231,cpm:18.49,cpc:2.16,product:'Pregnancy Set',hookStyle:'problem'},
+  {type:'Brand',name:'SALE 1 Story Title',shortName:'Sale 1 Story Title',spend:257.77,roas:2.68,ctr:0.0071,hook:0,freq:1.25,imp:13839,cpm:18.63,cpc:2.63,product:'Sitewide',hookStyle:'social-proof'},
+  {type:'Brand',name:'Stack The Ritual Preg Set Story',shortName:'Stack the Ritual',spend:420.66,roas:2.57,ctr:0.0109,hook:0.121,freq:1.09,imp:32797,cpm:12.83,cpc:1.18,product:'Pregnancy Set',hookStyle:'routine'},
+  {type:'Brand',name:'Get Ready With Me Routine Audio',shortName:'Get Ready With Me',spend:385.68,roas:2.45,ctr:0.0153,hook:0.366,freq:1.06,imp:6211,cpm:62.10,cpc:4.06,product:'Pregnancy Set',hookStyle:'routine'},
+  {type:'Brand',name:'Motherhood Creative Main (255K impr)',shortName:'Motherhood Creative',spend:4760.85,roas:2.34,ctr:0.0188,hook:0.226,freq:1.06,imp:255813,cpm:18.61,cpc:0.99,product:'Multiple',hookStyle:'emotional'},
+  {type:'Brand',name:'Stretch Glow Up Shoot BTS (120s)',shortName:'Stretch BTS 120s',spend:45.66,roas:2.10,ctr:0.0227,hook:0.371,freq:1.09,imp:1982,cpm:23.04,cpc:1.01,product:'Stretch Mark Cream',hookStyle:'transformation'},
+  {type:'Brand',name:'PAID_MotherDaySale_02 Static',shortName:'MDay Sale Static',spend:1277.28,roas:2.02,ctr:0.0065,hook:0,freq:1.35,imp:77445,cpm:16.49,cpc:2.53,product:'Sitewide',hookStyle:'emotional'},
+  {type:'Brand',name:'Mary Firming Serum Story',shortName:'Mary Firming Serum',spend:1334.42,roas:2.02,ctr:0.0147,hook:0.262,freq:1.09,imp:53540,cpm:24.92,cpc:1.70,product:'Firming Serum',hookStyle:'routine'},
+];
+
+let leaderboardSort = 'roas';
+let leaderboardFilter = 'all';
+
+function renderCreative(){
+  // UGC vs Brand comparison charts
+  dc('cr-ugc-roas');dc('cr-ugc-hook');dc('cr-ugc-ctr');
+  const ugcAds=TW_ADS.filter(a=>a.type==='UGC'&&a.roas>0);
+  const brdAds=TW_ADS.filter(a=>a.type==='Brand'&&a.roas>0);
+  const avg=arr=>arr.reduce((s,a)=>s+a,0)/arr.length;
+  const ugcRoas=avg(ugcAds.map(a=>a.roas));
+  const brdRoas=avg(brdAds.map(a=>a.roas));
+  const ugcHook=avg(ugcAds.filter(a=>a.hook>0).map(a=>a.hook*100));
+  const brdHook=avg(brdAds.filter(a=>a.hook>0).map(a=>a.hook*100));
+  const ugcCtr=avg(ugcAds.filter(a=>a.ctr>0).map(a=>a.ctr*100));
+  const brdCtr=avg(brdAds.filter(a=>a.ctr>0).map(a=>a.ctr*100));
+  const barBase=(labels,data,colors,cb)=>({type:'bar',data:{labels,datasets:[{data,backgroundColor:colors,borderRadius:0}]},options:{...base(),indexAxis:'y',plugins:{...base().plugins,legend:{display:false},tooltip:{callbacks:{label:c=>cb(c.raw)}}},scales:{x:{grid:{color:'#ede7db'},ticks:{callback:cb}},y:{grid:{display:false}}}}});
+  charts['cr-ugc-roas']=new Chart(document.getElementById('cr-ugc-roas'),barBase(['UGC','Brand'],[ugcRoas.toFixed(2),brdRoas.toFixed(2)],['rgba(107,143,94,.75)','rgba(168,124,42,.75)'],v=>v+'×'));
+  charts['cr-ugc-hook']=new Chart(document.getElementById('cr-ugc-hook'),barBase(['UGC','Brand'],[ugcHook.toFixed(1),brdHook.toFixed(1)],['rgba(107,143,94,.75)','rgba(168,124,42,.75)'],v=>v+'%'));
+  charts['cr-ugc-ctr']=new Chart(document.getElementById('cr-ugc-ctr'),barBase(['UGC','Brand'],[ugcCtr.toFixed(2),brdCtr.toFixed(2)],['rgba(107,143,94,.75)','rgba(168,124,42,.75)'],v=>v+'%'));
+
+  // Hook rate chart (top 12 by spend with hook data)
+  const withHook=TW_ADS.filter(a=>a.hook>0).sort((a,b)=>b.spend-a.spend).slice(0,12);
+  dc('cr-hook-chart');
+  charts['cr-hook-chart']=new Chart(document.getElementById('cr-hook-chart'),{type:'bar',
+    data:{labels:withHook.map(a=>a.shortName),datasets:[{data:withHook.map(a=>+(a.hook*100).toFixed(1)),backgroundColor:withHook.map(a=>a.hook>=0.30?'rgba(90,122,82,.8)':a.hook>=0.20?'rgba(168,124,42,.7)':'rgba(158,58,42,.5)'),borderRadius:0}]},
+    options:{...base(),plugins:{...base().plugins,tooltip:{callbacks:{label:c=>c.raw+'% hook rate'}}},scales:{x:{grid:{color:'#ede7db'},ticks:{maxRotation:35,font:{size:9}}},y:{grid:{color:'#ede7db'},ticks:{callback:v=>v+'%'}}}}});
+
+  // Hook vs ROAS scatter
+  const scatterData=TW_ADS.filter(a=>a.hook>0&&a.roas>0&&a.roas<15).map(a=>({x:+(a.hook*100).toFixed(1),y:+a.roas.toFixed(2),label:a.shortName,type:a.type}));
+  dc('cr-hook-roas');
+  charts['cr-hook-roas']=new Chart(document.getElementById('cr-hook-roas'),{type:'scatter',
+    data:{datasets:[
+      {label:'UGC',data:scatterData.filter(a=>a.type==='UGC'),backgroundColor:'rgba(107,143,94,.7)',pointRadius:6},
+      {label:'Brand',data:scatterData.filter(a=>a.type==='Brand'),backgroundColor:'rgba(168,124,42,.7)',pointRadius:6}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,labels:{color:'#9c8e80',boxWidth:10,font:{size:9}}},tooltip:{backgroundColor:'#2c2118',bodyColor:'#faf8f4',callbacks:{label:c=>`${c.raw.label}: Hook ${c.raw.x}%, ROAS ${c.raw.y}×`}}},
+    scales:{x:{grid:{color:'#ede7db'},title:{display:true,text:'Hook Rate %',color:'#9c8e80',font:{size:9}},ticks:{callback:v=>v+'%'}},y:{grid:{color:'#ede7db'},title:{display:true,text:'ROAS',color:'#9c8e80',font:{size:9}},ticks:{callback:v=>v+'×'}}}}});
+
+  // Fatigue map (freq vs roas bubble)
+  dc('cr-fatigue-chart');
+  const fatigueData=TW_ADS.filter(a=>a.roas>0).map(a=>({x:+a.freq.toFixed(2),y:+a.roas.toFixed(2),r:Math.min(Math.sqrt(a.spend)*0.8,20),label:a.shortName,spend:a.spend}));
+  charts['cr-fatigue-chart']=new Chart(document.getElementById('cr-fatigue-chart'),{type:'bubble',
+    data:{datasets:[
+      {label:'UGC',data:fatigueData.filter((_,i)=>TW_ADS.filter(a=>a.roas>0)[i]?.type==='UGC'),backgroundColor:'rgba(107,143,94,.55)',borderColor:'rgba(107,143,94,.8)',borderWidth:1},
+      {label:'Brand',data:fatigueData.filter((_,i)=>TW_ADS.filter(a=>a.roas>0)[i]?.type==='Brand'),backgroundColor:'rgba(168,124,42,.55)',borderColor:'rgba(168,124,42,.8)',borderWidth:1},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,labels:{color:'#9c8e80',boxWidth:10,font:{size:9}}},tooltip:{backgroundColor:'#2c2118',bodyColor:'#faf8f4',callbacks:{label:c=>`${c.raw.label} — Freq: ${c.raw.x}×, ROAS: ${c.raw.y}×, Spend: $${c.raw.spend?.toLocaleString()}`}}},
+    scales:{x:{grid:{color:'#ede7db'},title:{display:true,text:'Frequency',color:'#9c8e80',font:{size:9}},min:1.0,ticks:{callback:v=>v+'×'}},y:{grid:{color:'#ede7db'},title:{display:true,text:'ROAS',color:'#9c8e80',font:{size:9}},ticks:{callback:v=>v+'×'}}}}});
+
+  // Hook style analysis
+  const hookStyles=[
+    {style:'Problem → Solution',key:'problem',icon:'⚠️',roas:3.8,ctr:'2.9%',hook:'28.4%',count:4,insight:'Highest ROAS style — leads with the pain point before revealing Nēmah as the fix'},
+    {style:'Social Proof',key:'social-proof',icon:'⭐',roas:3.2,ctr:'1.8%',hook:'18.6%',count:5,insight:'Works well for new audiences — leverages trusted voices and real results'},
+    {style:'Daily Routine',key:'routine',icon:'☀️',roas:2.9,ctr:'2.2%',hook:'22.1%',count:9,insight:'Highest volume style — works across products and audience temperatures'},
+    {style:'Emotional / Gifting',key:'emotional',icon:'💝',roas:2.4,ctr:'1.1%',hook:'15.8%',count:5,insight:'Best for cold audiences and seasonal pushes (Mother\'s Day) — lower CVR but high AOV'},
+  ];
+  document.getElementById('hook-styles-grid').innerHTML=hookStyles.map(h=>`
+    <div style="background:var(--warm);padding:22px 24px">
+      <div style="font-size:20px;margin-bottom:10px">${h.icon}</div>
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:6px;font-weight:400">${h.style}</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:${h.roas>=3?'var(--green)':'var(--yellow)'};margin-bottom:4px">${h.roas}× ROAS</div>
+      <div style="display:flex;gap:12px;margin-bottom:10px">
+        <span style="font-size:10px;color:var(--muted)">CTR ${h.ctr}</span>
+        <span style="font-size:10px;color:var(--muted)">Hook ${h.hook}</span>
+        <span style="font-size:10px;color:var(--muted)">${h.count} ads</span>
+      </div>
+      <div style="font-size:10px;color:var(--muted);line-height:1.5;font-style:italic">${h.insight}</div>
+    </div>`).join('');
+
+  renderLeaderboard();
+  renderLandingPages();
+}
+
+function renderLeaderboard(){
+  let ads=[...TW_ADS];
+  if(leaderboardFilter!=='all') ads=ads.filter(a=>a.type===leaderboardFilter);
+  ads.sort((a,b)=>{
+    if(leaderboardSort==='roas')return b.roas-a.roas;
+    if(leaderboardSort==='spend')return b.spend-a.spend;
+    if(leaderboardSort==='hook')return b.hook-a.hook;
+    if(leaderboardSort==='ctr')return b.ctr-a.ctr;
+    if(leaderboardSort==='cpc')return a.cpc-b.cpc;
+    return 0;
+  });
+  const tb=document.getElementById('leaderboard-tbody');tb.innerHTML='';
+  ads.forEach((a,i)=>{
+    const rc=a.roas>=4?'var(--green)':a.roas>=2?'var(--yellow)':a.roas>0?'var(--red)':'var(--muted)';
+    const fatigue=a.freq>=1.3?'🔴 High freq':a.freq>=1.2?'🟡 Watch':a.freq>=1.1?'🟢 Healthy':'🟢 Fresh';
+    const sig=a.roas>=4?'spill-g':a.roas>=2?'spill-y':a.roas>0?'spill-r':'spill-n';
+    const sigTxt=a.roas>=4?'Scale':a.roas>=2?'Monitor':a.roas>0?'Optimise':'No conv';
+    tb.innerHTML+=`<tr>
+      <td style="color:var(--muted)">${i+1}</td>
+      <td style="max-width:200px;font-weight:400">${a.shortName}</td>
+      <td><span style="font-size:8px;padding:2px 7px;background:${a.type==='UGC'?'rgba(90,122,82,.12)':'rgba(168,124,42,.12)'};color:${a.type==='UGC'?'var(--green)':'var(--yellow)'}">${a.type}</span></td>
+      <td style="color:${rc};font-weight:400">${a.roas>0?a.roas.toFixed(2)+'×':'—'}</td>
+      <td>$${a.spend.toLocaleString(undefined,{maximumFractionDigits:0})}</td>
+      <td style="color:${a.hook>=0.25?'var(--green)':a.hook>=0.15?'var(--yellow)':a.hook>0?'var(--red)':'var(--muted)'}">${a.hook>0?(a.hook*100).toFixed(1)+'%':'—'}</td>
+      <td>${a.ctr>0?(a.ctr*100).toFixed(2)+'%':'—'}</td>
+      <td style="font-size:10px">${fatigue}</td>
+      <td>${a.cpc>0?'$'+a.cpc.toFixed(2):'—'}</td>
+      <td>$${a.cpm.toFixed(2)}</td>
+      <td><span class="spill ${sig}">${sigTxt}</span></td>
+    </tr>`;
+  });
+}
+
+function sortLeaderboard(key,btn){
+  leaderboardSort=key;
+  if(btn){document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
+  renderLeaderboard();
+}
+function filterLeaderboard(f,btn){
+  leaderboardFilter=f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
+  renderLeaderboard();
+}
+
+function generateBrief(){
+  const fmt=document.getElementById('brief-format').value;
+  const prod=document.getElementById('brief-product').value;
+  const hook=document.getElementById('brief-hook').value;
+  const talent=document.getElementById('brief-talent').value;
+
+  const products={
+    'pregnancy-set':'Pregnancy Set (Stretch Mark Cream + Belly Oil + Nipple Balm)',
+    'firming-serum':'Firming Body Serum',
+    'scar-cream':'Restorative Scar Treatment Cream',
+    'belly-oil':'Nourishing Belly Oil',
+    'stretch-cream':'Revitalizing Stretch Mark Cream',
+    'skin-spray':'HOCL Skin Spray'
+  };
+  const hooks={
+    'problem':['Do you have [problem]?','Nobody warned me about this…','If you\'re struggling with [problem], watch this'],
+    'social-proof':['I tried [product] for 30 days…','This is what my skin looks like after Nēmah','As a [role], I was skeptical but…'],
+    'routine':['My morning routine during pregnancy','Get ready with me — postpartum skincare','My 3-step [time] routine with Nēmah'],
+    'emotional':['For the mamas who do it all…','She deserves more than just a card','This Mother\'s Day, give her something that actually works'],
+    'transformation':['Before vs after 8 weeks of Nēmah','Watch what happened to my [skin area]…','The glow up is real — here\'s proof']
+  };
+  const talentMap={'mary':'Mary (Founder)','ugc-creator':'UGC Creator (female, 25–40, mom)','no-talent':'No talent — product-only hero shot'};
+  const fmtMap={'ugc-video':'UGC Video (15–30sec, 9×16)','ugc-story':'UGC Story (9×16, 6–10sec)','brand-static':'Brand Static (1×1 + 9×16)','brand-video':'Brand Video (30–60sec)'};
+  const hookSuggestions=hooks[hook]||hooks['routine'];
+
+  document.getElementById('brief-output').innerHTML=`
+    <div style="font-size:9px;text-transform:uppercase;letter-spacing:3px;color:var(--muted);margin-bottom:16px">Generated Brief</div>
+    <div style="display:grid;gap:12px">
+      <div><div style="font-size:8px;text-transform:uppercase;letter-spacing:2px;color:var(--light);margin-bottom:4px">Product</div><div style="font-size:11px;font-weight:400">${products[prod]}</div></div>
+      <div><div style="font-size:8px;text-transform:uppercase;letter-spacing:2px;color:var(--light);margin-bottom:4px">Format</div><div style="font-size:11px">${fmtMap[fmt]}</div></div>
+      <div><div style="font-size:8px;text-transform:uppercase;letter-spacing:2px;color:var(--light);margin-bottom:4px">Talent</div><div style="font-size:11px">${talentMap[talent]}</div></div>
+      <div><div style="font-size:8px;text-transform:uppercase;letter-spacing:2px;color:var(--light);margin-bottom:4px">Hook Options (test all 3)</div>
+        ${hookSuggestions.map(h=>`<div style="font-size:11px;font-style:italic;padding:6px 10px;background:var(--warm2);margin-bottom:4px;border-left:2px solid var(--brown)">"${h}"</div>`).join('')}
+      </div>
+      <div><div style="font-size:8px;text-transform:uppercase;letter-spacing:2px;color:var(--light);margin-bottom:4px">Key Message</div><div style="font-size:11px">Clean, dermatologist-approved. EWG Verified. Safe for pregnancy, postpartum & baby.</div></div>
+      <div><div style="font-size:8px;text-transform:uppercase;letter-spacing:2px;color:var(--light);margin-bottom:4px">CTA</div><div style="font-size:11px;font-weight:400">Shop Now → nemah.com</div></div>
+      <div><div style="font-size:8px;text-transform:uppercase;letter-spacing:2px;color:var(--light);margin-bottom:4px">Based on top performer</div><div style="font-size:11px;color:var(--green)">Hook rate target: >25% · ROAS target: >3×</div></div>
+    </div>`;
+}
+
+function renderLandingPages(){
+  const pages=[
+    {page:'/products/pregnancy-set',traffic:'4,820',cvr:'6.8%',aov:'$94.50',revenue:'$30,970',bounce:'34%',sig:'spill-g',sigTxt:'Top performer'},
+    {page:'/products/firming-body-serum',traffic:'2,140',cvr:'5.2%',aov:'$62.00',revenue:'$6,900',bounce:'41%',sig:'spill-g',sigTxt:'Scale traffic'},
+    {page:'/products/restorative-scar-cream',traffic:'3,890',cvr:'4.1%',aov:'$54.00',revenue:'$8,620',bounce:'48%',sig:'spill-y',sigTxt:'Optimise CTA'},
+    {page:'/collections/all',traffic:'1,240',cvr:'2.8%',aov:'$71.00',revenue:'$2,460',bounce:'52%',sig:'spill-y',sigTxt:'High bounce'},
+    {page:'/products/belly-oil',traffic:'890',cvr:'3.9%',aov:'$48.00',revenue:'$1,670',bounce:'44%',sig:'spill-y',sigTxt:'Monitor'},
+    {page:'/products/skin-spray',traffic:'2,820',cvr:'2.1%',aov:'$38.00',revenue:'$2,250',bounce:'61%',sig:'spill-r',sigTxt:'Low CVR'},
+  ];
+  const tb=document.getElementById('lp-tbody');tb.innerHTML='';
+  pages.forEach(p=>{
+    const cvrN=parseFloat(p.cvr);
+    const cvrC=cvrN>=5?'var(--green)':cvrN>=3.5?'var(--yellow)':'var(--red)';
+    tb.innerHTML+=`<tr><td style="font-family:monospace;font-size:10px">${p.page}</td><td>${p.traffic}</td><td style="color:${cvrC};font-weight:400">${p.cvr}</td><td>${p.aov}</td><td style="font-weight:400">${p.revenue}</td><td>${p.bounce}</td><td><span class="spill ${p.sig}">${p.sigTxt}</span></td></tr>`;
+  });
+}
 const KLAVIYO_CAMPAIGNS = [
   {name:"Mother's Day Email 4",   date:"May 3",  recipients:41019, openRate:0.584, clickRate:0.00347, revenue:2555, rpr:0.0624},
   {name:"Mother's Day Email 3",   date:"May 1",  recipients:40848, openRate:0.610, clickRate:0.00351, revenue:1632, rpr:0.0401},
