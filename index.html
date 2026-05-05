@@ -160,6 +160,7 @@ tr:hover td{background:rgba(237,231,219,.4)}
 <nav class="nav">
   <div class="tab active" onclick="showTab('overview',this)">Overview</div>
   <div class="tab" onclick="showTab('creative',this)">Creative</div>
+  <div class="tab" onclick="showTab('email',this)">Email / SMS</div>
   <div class="tab" onclick="showTab('acquisition',this)">Acquisition</div>
   <div class="tab" onclick="showTab('conversion',this)">Conversion & AOV</div>
   <div class="tab" onclick="showTab('spend',this)">Spend</div>
@@ -247,9 +248,54 @@ tr:hover td{background:rgba(237,231,219,.4)}
   <div id="sp-signals"></div>
 </div>
 
+<!-- EMAIL / SMS TAB — live from Klaviyo -->
+<div id="view-email" class="view">
+  <div class="slabel">Email Performance — Last 30 Days (Live from Klaviyo)</div>
+  <div class="kg g4">
+    <div class="kpi"><div class="kpi-lbl">Campaigns Sent</div><div class="kpi-val">12</div><div class="kpi-sub">Apr 5 – May 3</div></div>
+    <div class="kpi"><div class="kpi-lbl">Avg Open Rate</div><div class="kpi-val">62.1%</div><div class="kpi-sub" style="color:var(--green)">↑ 3× industry avg (20%)</div></div>
+    <div class="kpi"><div class="kpi-lbl">Avg Click Rate</div><div class="kpi-val">0.42%</div><div class="kpi-sub">Clicks / delivered</div></div>
+    <div class="kpi"><div class="kpi-lbl">Email Revenue</div><div class="kpi-val">$19,831</div><div class="kpi-sub">Attribution 30 days</div></div>
+  </div>
+  <div class="cg cg2">
+    <div class="cc"><div class="ct">Open Rate by Campaign</div><div class="h240"><canvas id="em-open-chart"></canvas></div></div>
+    <div class="cc"><div class="ct">Revenue per Recipient by Campaign</div><div class="h240"><canvas id="em-rev-chart"></canvas></div></div>
+  </div>
+  <div class="twrap">
+    <div class="thead-bar">Campaign Performance — Live from Klaviyo</div>
+    <table>
+      <thead><tr><th>Campaign</th><th>Sent</th><th>Recipients</th><th>Open Rate</th><th>Click Rate</th><th>Revenue</th><th>RPR</th></tr></thead>
+      <tbody id="em-tbody"></tbody>
+    </table>
+  </div>
+  <div class="slabel">SMS Performance</div>
+  <div class="kg g4">
+    <div class="kpi"><div class="kpi-lbl">SMS Campaign</div><div class="kpi-val">1</div><div class="kpi-sub">Mother's Day — Apr 28</div></div>
+    <div class="kpi"><div class="kpi-lbl">Recipients</div><div class="kpi-val">11,188</div><div class="kpi-sub">SMS Subscribers list</div></div>
+    <div class="kpi"><div class="kpi-lbl">Click Rate</div><div class="kpi-val">4.95%</div><div class="kpi-sub">550 unique clicks</div></div>
+    <div class="kpi"><div class="kpi-lbl">Revenue</div><div class="kpi-val">$265</div><div class="kpi-sub">$0.024 per recipient</div></div>
+  </div>
+</div>
+
 </div>
 
 <script>
+
+// ── KLAVIYO REAL DATA (last 30 days) ──
+const KLAVIYO_CAMPAIGNS = [
+  {name:"Mother's Day Email 4",   date:"May 3",  recipients:41019, openRate:0.584, clickRate:0.00347, revenue:2555, rpr:0.0624},
+  {name:"Mother's Day Email 3",   date:"May 1",  recipients:40848, openRate:0.610, clickRate:0.00351, revenue:1632, rpr:0.0401},
+  {name:"Mother's Day Sale #2",   date:"Apr 29", recipients:40822, openRate:0.611, clickRate:0.00405, revenue:1965, rpr:0.0483},
+  {name:"Mother's Day Sale #1",   date:"Apr 28", recipients:41230, openRate:0.590, clickRate:0.00547, revenue:3306, rpr:0.0804},
+  {name:"Stretch or Belly?",      date:"Apr 20", recipients:40400, openRate:0.615, clickRate:0.00263, revenue:1977, rpr:0.0490},
+  {name:"Firming Serum Q&A",      date:"Apr 17", recipients:40402, openRate:0.638, clickRate:0.00330, revenue:763,  rpr:0.0189},
+  {name:"Target Giveaway",        date:"Apr 13", recipients:30899, openRate:0.662, clickRate:0.01285, revenue:946,  rpr:0.0307},
+  {name:"Firming Serum 1 Year",   date:"Apr 15", recipients:40435, openRate:0.641, clickRate:0.00300, revenue:1562, rpr:0.0387},
+  {name:"Scar Highlight",         date:"Apr 12", recipients:40404, openRate:0.635, clickRate:0.00278, revenue:769,  rpr:0.0191},
+  {name:"ICYMI Target × Cross",   date:"Apr 9",  recipients:30566, openRate:0.654, clickRate:0.00508, revenue:1504, rpr:0.0493},
+  {name:"Dallas Dinner",          date:"Apr 7",  recipients:44192, openRate:0.549, clickRate:0.00339, revenue:1346, rpr:0.0306},
+  {name:"Liquid Sunshine",        date:"Apr 5",  recipients:39818, openRate:0.643, clickRate:0.00357, revenue:1452, rpr:0.0365},
+];
 Chart.defaults.color='#9c8e80';Chart.defaults.borderColor='#ddd6c8';
 Chart.defaults.font.family="'Jost',sans-serif";Chart.defaults.font.size=10;Chart.defaults.font.weight='300';
 
@@ -501,15 +547,6 @@ function applyCustom() {
   renderAll();
 }
 
-function renderAll(){
-  renderOverview();renderCreative();renderAcquisition();renderConversion();renderSpend();
-  document.getElementById('hdr-roas').textContent=xr(D.roas);
-  document.getElementById('hdr-spend').textContent=$K(D.spend);
-  document.getElementById('hdr-cpa').textContent='$'+D.cpa.toFixed(2);
-  document.getElementById('hdr-cvr').textContent=pctFmt(D.cvr);
-  document.getElementById('hdr-ts').textContent=D.label;
-}
-
 function renderOverview(){
   document.getElementById('ov-label').textContent='Marketing Snapshot — '+D.label;
   document.getElementById('ov-rev').textContent=$K(D.revenue);
@@ -568,19 +605,94 @@ function renderCreative(){
   charts['cr-roas']=new Chart(document.getElementById('cr-roas-chart'),{type:'bar',data:{labels:['Video','Image'],datasets:[{data:[D.videoRoas,D.imageRoas],backgroundColor:['rgba(107,143,94,.75)','rgba(168,124,42,.75)'],borderRadius:0}]},options:{...base(),scales:{x:{grid:{display:false}},y:{grid:{color:'#ede7db'},ticks:{callback:v=>v+'×'},min:0}}}});
   charts['cr-ctr']=new Chart(document.getElementById('cr-ctr-chart'),{type:'bar',data:{labels:['Video','Image'],datasets:[{data:[(D.videoCtr*100).toFixed(2),(D.imageCtr*100).toFixed(2)],backgroundColor:['rgba(107,143,94,.75)','rgba(168,124,42,.75)'],borderRadius:0}]},options:{...base(),scales:{x:{grid:{display:false}},y:{grid:{color:'#ede7db'},ticks:{callback:v=>v+'%'},min:0}}}});
 
-  const GRADS=['linear-gradient(150deg,#2c2118,#5c4033)','linear-gradient(150deg,#1a3a6b,#2d6bcf)','linear-gradient(150deg,#2d1b4e,#6d28d9)','linear-gradient(150deg,#1b3a2d,#16a34a)','linear-gradient(150deg,#4c1d1d,#b91c1c)','linear-gradient(150deg,#1c1a16,#78716c)'];
-  const EMOJIS=['✨','🔍','🌸','🌿','💧','🌺'];
-  const TCLRS=['#c8b89a','#c8d8f0','#ddd6fe','#bbf7d0','#fecaca','#e7e5e4'];
   const getFlag=r=>r>=2.5?{c:'f-scale',t:'↑ Scale — strong ROAS'}:r>=1.8?{c:'f-scale',t:'↑ Scale carefully'}:r>=1.2?{c:'f-watch',t:'→ Monitor performance'}:{c:'f-pause',t:'⚠ Optimise or rotate'};
+
+  // Ad creative mockup templates — renders actual ad format based on channel/type
+  function adMockup(ad, i) {
+    const isGoogle = ad.ch === 'google';
+    const isVideo  = !isGoogle && ad.ctr > 0.015;
+    const brandBg  = ['#f7f0e8','#eef4f0','#faf0ec','#f0f4ee','#f4eeea','#eef0f4'][i%6];
+    const accentClr= ['#5c4033','#4a7a52','#8b4513','#3a6b52','#7a3a2a','#3a4a6b'][i%6];
+
+    if(isGoogle){
+      // Google Search ad mockup
+      return`<div style="background:#fff;padding:18px;height:100%;display:flex;flex-direction:column;gap:8px;border:1px solid #e8e0d8;font-family:'Jost',sans-serif">
+        <div style="font-size:8px;color:#3c5a9a;text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;gap:6px">
+          <div style="width:16px;height:16px;background:#4285f4;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:8px;font-weight:700">N</div>
+          nemah.com › products
+        </div>
+        <div style="font-size:16px;color:#1a0dab;line-height:1.3;font-weight:400">${ad.name.replace('Google Search — ','')}</div>
+        <div style="font-size:11px;color:#4d5156;line-height:1.5">Clean, dermatologist-approved skincare for every stage of motherhood. EWG Verified formulas for pregnancy, postpartum & baby. Free shipping $75+</div>
+        <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap">
+          <span style="font-size:10px;color:#1a0dab;border:1px solid #dadce0;padding:3px 8px">Pregnancy Set</span>
+          <span style="font-size:10px;color:#1a0dab;border:1px solid #dadce0;padding:3px 8px">Baby Care</span>
+          <span style="font-size:10px;color:#1a0dab;border:1px solid #dadce0;padding:3px 8px">Gift Ideas</span>
+        </div>
+        <div style="margin-top:auto;font-size:9px;color:#70757a">Ad · ${num(ad.impressions)} impressions this period</div>
+      </div>`;
+    } else if(isVideo){
+      // Meta Video ad mockup
+      return`<div style="background:#fff;height:100%;display:flex;flex-direction:column;font-family:'Jost',sans-serif;border:1px solid #e8e0d8">
+        <div style="background:${brandBg};flex:1;min-height:160px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden">
+          <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(44,33,24,.6))"></div>
+          <div style="text-align:center;padding:20px;position:relative;z-index:1">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-style:italic;color:${accentClr};margin-bottom:8px;line-height:1.2">${ad.name.replace("Mother's Day — ",'').replace(' UGC','').replace(' Video','')}</div>
+            <div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:${accentClr};opacity:.8">Nēmah · Tap to watch</div>
+          </div>
+          <div style="position:absolute;bottom:12px;right:12px;width:32px;height:32px;background:rgba(255,255,255,.9);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px">▶</div>
+          <div style="position:absolute;bottom:0;left:0;right:0;height:3px;background:rgba(255,255,255,.3)"><div style="width:35%;height:100%;background:white"></div></div>
+        </div>
+        <div style="padding:12px 14px;background:#fff">
+          <div style="font-size:9px;color:#606770;margin-bottom:4px;display:flex;align-items:center;gap:6px">
+            <div style="width:24px;height:24px;background:var(--espresso);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-family:'Cormorant Garamond',serif;font-size:10px;font-style:italic">N</div>
+            Nēmah · Sponsored
+          </div>
+          <div style="font-size:12px;font-weight:500;color:#1c1e21;margin-bottom:2px;line-height:1.3">${trunc(ad.name,48)}</div>
+          <div style="font-size:11px;color:#606770">nemah.com</div>
+          <div style="margin-top:10px;background:#f0f2f5;padding:8px 12px;display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:11px;color:#1c1e21">Shop Now</span>
+            <span style="font-size:18px;color:#606770">›</span>
+          </div>
+        </div>
+      </div>`;
+    } else {
+      // Meta Image/Static ad mockup
+      return`<div style="background:#fff;height:100%;display:flex;flex-direction:column;font-family:'Jost',sans-serif;border:1px solid #e8e0d8">
+        <div style="background:${brandBg};flex:1;min-height:160px;display:flex;align-items:center;justify-content:center;padding:24px;position:relative">
+          <div style="text-align:center">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:13px;font-style:italic;color:${accentClr};opacity:.6;letter-spacing:3px;text-transform:uppercase;margin-bottom:12px">Nēmah</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:24px;color:${accentClr};line-height:1.3;font-weight:300">${ad.name.replace(' — Ad Set B','').replace(' — Ad Set A','').replace('IWD ','').replace(' Static Image','').replace('Scar Cream Testimonial','For the scars that tell your story')}</div>
+            <div style="width:40px;height:1px;background:${accentClr};opacity:.3;margin:12px auto"></div>
+            <div style="font-size:10px;text-transform:uppercase;letter-spacing:2px;color:${accentClr};opacity:.7">Clean · Clinically studied</div>
+          </div>
+        </div>
+        <div style="padding:12px 14px;background:#fff">
+          <div style="font-size:9px;color:#606770;margin-bottom:4px;display:flex;align-items:center;gap:6px">
+            <div style="width:24px;height:24px;background:var(--espresso);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-family:'Cormorant Garamond',serif;font-size:10px;font-style:italic">N</div>
+            Nēmah · Sponsored
+          </div>
+          <div style="font-size:12px;font-weight:500;color:#1c1e21;margin-bottom:2px;line-height:1.3">${trunc(ad.name,48)}</div>
+          <div style="font-size:11px;color:#606770">nemah.com</div>
+          <div style="margin-top:10px;background:#f0f2f5;padding:8px 12px;display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:11px;color:#1c1e21">Shop Now</span>
+            <span style="font-size:18px;color:#606770">›</span>
+          </div>
+        </div>
+      </div>`;
+    }
+  }
 
   document.getElementById('creative-cards').innerHTML=(D.topAds||[]).map((ad,i)=>{
     const flag=getFlag(ad.roas);
     const rc=ad.roas>=2?'var(--green)':ad.roas>=1.2?'var(--yellow)':'var(--red)';
+    const isGoogle=ad.ch==='google';
+    const isVideo=!isGoogle&&ad.ctr>0.015;
+    const typeBadge=isGoogle?'Google · Search':isVideo?'Meta · Video':'Meta · Image';
     return`<div class="ccard">
-      <div class="cthumb" style="background:${GRADS[i%GRADS.length]}">
-        <span class="cbadge ${ad.ch==='google'?'b-google':'b-meta'}">${ad.ch==='google'?'Google · Search':'Meta · '+( ad.ctr>0.015?'Video':'Image')}</span>
-        <div class="crank">#${i+1}</div>
-        <div class="cvis" style="color:${TCLRS[i%TCLRS.length]}"><div><div style="font-size:24px;margin-bottom:10px">${EMOJIS[i%EMOJIS.length]}</div><div>${trunc(ad.name,55)}</div></div></div>
+      <div class="cthumb" style="background:#f8f5f0;overflow:hidden">
+        <span class="cbadge ${isGoogle?'b-google':'b-meta'}" style="z-index:2">${typeBadge}</span>
+        <div class="crank" style="z-index:2">#${i+1}</div>
+        <div style="width:100%;height:100%">${adMockup(ad,i)}</div>
       </div>
       <div class="cmeta">
         <div class="cname">${trunc(ad.name,48)}</div>
@@ -678,6 +790,59 @@ function renderSpend(){
   if(D.metaRoas<2)sigs.push({c:'ar',i:'⚠',t:`Meta ROAS ${xr(D.metaRoas)} — below 2× efficiency threshold`,b:`At typical COGS (~45%) for health & beauty, 2.2× ROAS is breakeven. Review Meta creative and targeting.`});
   if(D.googleRoas>4)sigs.push({c:'ag',i:'↑',t:`Google at ${xr(D.googleRoas)} — significantly under-invested`,b:`${(D.googleSpend/D.spend*100).toFixed(0)}% of budget on your best channel. Scaling Google to $20K projects $${(20000*D.googleRoas/1000).toFixed(0)}K revenue.`});
   document.getElementById('sp-signals').innerHTML=sigs.map(s=>`<div class="alert ${s.c}"><div class="a-icon">${s.i}</div><div class="a-text"><div class="a-title">${s.t}</div>${s.b}</div></div>`).join('');
+}
+
+function renderEmail(){
+  // Klaviyo email campaign table — real data
+  const tb=document.getElementById('em-tbody'); tb.innerHTML='';
+  KLAVIYO_CAMPAIGNS.forEach(c=>{
+    const orPct=(c.openRate*100).toFixed(1)+'%';
+    const crPct=(c.clickRate*100).toFixed(2)+'%';
+    const orColor=c.openRate>=0.60?'var(--green)':c.openRate>=0.50?'var(--yellow)':'var(--muted)';
+    tb.innerHTML+=`<tr>
+      <td style="font-weight:400">${c.name}</td>
+      <td>${c.date}</td>
+      <td>${c.recipients.toLocaleString()}</td>
+      <td style="color:${orColor};font-weight:400">${orPct}</td>
+      <td>${crPct}</td>
+      <td style="font-weight:400">$${c.revenue.toLocaleString()}</td>
+      <td>$${c.rpr.toFixed(4)}</td>
+    </tr>`;
+  });
+
+  // Open rate chart
+  dc('em-open');dc('em-rev');
+  const labels=KLAVIYO_CAMPAIGNS.slice(0,8).map(c=>c.name.length>18?c.name.slice(0,18)+'…':c.name);
+  charts['em-open']=new Chart(document.getElementById('em-open-chart'),{
+    type:'bar',
+    data:{labels,datasets:[{
+      data:KLAVIYO_CAMPAIGNS.slice(0,8).map(c=>+(c.openRate*100).toFixed(1)),
+      backgroundColor:'rgba(92,64,51,.65)',borderRadius:0
+    }]},
+    options:{...base(),plugins:{...base().plugins,tooltip:{callbacks:{label:c=>c.raw+'%'}}},
+    scales:{x:{grid:{display:false},ticks:{maxRotation:35,font:{size:9}}},y:{grid:{color:'#ede7db'},ticks:{callback:v=>v+'%'},max:80}}}
+  });
+
+  charts['em-rev']=new Chart(document.getElementById('em-rev-chart'),{
+    type:'bar',
+    data:{labels,datasets:[{
+      data:KLAVIYO_CAMPAIGNS.slice(0,8).map(c=>+(c.rpr*100).toFixed(2)),
+      backgroundColor:'rgba(90,122,82,.65)',borderRadius:0
+    }]},
+    options:{...base(),plugins:{...base().plugins,tooltip:{callbacks:{label:c=>'$'+(c.raw/100).toFixed(4)+' / recipient'}}},
+    scales:{x:{grid:{display:false},ticks:{maxRotation:35,font:{size:9}}},y:{grid:{color:'#ede7db'},ticks:{callback:v=>'$'+(v/100).toFixed(2)}}}}
+  });
+}
+
+// Add renderEmail to renderAll
+const _origRenderAll = renderAll;
+function renderAll(){
+  renderOverview();renderCreative();renderEmail();renderAcquisition();renderConversion();renderSpend();
+  document.getElementById('hdr-roas').textContent=xr(D.roas);
+  document.getElementById('hdr-spend').textContent=$K(D.spend);
+  document.getElementById('hdr-cpa').textContent='$'+D.cpa.toFixed(2);
+  document.getElementById('hdr-cvr').textContent=pctFmt(D.cvr);
+  document.getElementById('hdr-ts').textContent=D.label;
 }
 
 document.addEventListener('DOMContentLoaded',()=>renderAll());
