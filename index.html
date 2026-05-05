@@ -192,12 +192,51 @@ tr:hover td{background:rgba(237,231,219,.4)}
 
 <div id="view-creative" class="view">
 
-  <!-- ① UGC vs Brand comparison -->
-  <div class="slabel">UGC vs Brand Creative — Last 30 Days (Live from Triple Whale)</div>
+  <!-- ORIGINAL: Video vs Image scorecard -->
+  <div class="slabel" id="cr-label">Creative Type Performance — Meta</div>
+  <div class="pcards">
+    <div class="pcard">
+      <div class="pcard-hdr"><div class="pcard-name"><div class="picon" style="background:#6b8f5e">▶</div>Video</div><span class="spill" id="cr-vid-pill">—</span></div>
+      <div class="pmg">
+        <div class="pm"><div class="pm-lbl">Spend</div><div class="pm-val" id="cr-vid-spend">—</div></div>
+        <div class="pm"><div class="pm-lbl">ROAS</div><div class="pm-val" id="cr-vid-roas">—</div></div>
+        <div class="pm"><div class="pm-lbl">CTR</div><div class="pm-val" id="cr-vid-ctr">—</div></div>
+      </div>
+      <div class="h180"><canvas id="cr-roas-chart"></canvas></div>
+    </div>
+    <div class="pcard">
+      <div class="pcard-hdr"><div class="pcard-name"><div class="picon" style="background:#a87c2a">▣</div>Image / Static</div><span class="spill" id="cr-img-pill">—</span></div>
+      <div class="pmg">
+        <div class="pm"><div class="pm-lbl">Spend</div><div class="pm-val" id="cr-img-spend">—</div></div>
+        <div class="pm"><div class="pm-lbl">ROAS</div><div class="pm-val" id="cr-img-roas">—</div></div>
+        <div class="pm"><div class="pm-lbl">CTR</div><div class="pm-val" id="cr-img-ctr">—</div></div>
+      </div>
+      <div class="h180"><canvas id="cr-ctr-chart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- ORIGINAL: Top creative cards with ad mockups -->
+  <div class="slabel">Top Ads — Creative Scorecard</div>
+  <div class="cr-grid" id="creative-cards"></div>
+
+  <!-- ORIGINAL: Winning headlines table -->
+  <div class="slabel">Winning Headlines by ROAS</div>
+  <div class="twrap">
+    <div class="thead-bar">Top Ads by ROAS (min. $10 spend)</div>
+    <table><thead><tr><th>Ad / Headline</th><th>Channel</th><th>Spend</th><th>Revenue</th><th>ROAS</th><th>CTR</th><th>Signal</th></tr></thead>
+    <tbody id="cr-headlines"></tbody></table>
+  </div>
+
+  <!-- ORIGINAL: Recommendations -->
+  <div class="slabel">Recommendations</div>
+  <div id="cr-recs"></div>
+
+  <!-- NEW ①: UGC vs Brand comparison — real TW data -->
+  <div class="slabel">UGC vs Brand — Last 30 Days (Live from Triple Whale)</div>
   <div class="kg g2" style="margin-bottom:8px">
     <div class="pcard" style="background:var(--warm);padding:24px;border:none">
       <div class="pcard-hdr" style="margin-bottom:16px">
-        <div class="pcard-name"><div class="picon" style="background:#6b8f5e;font-size:10px;font-family:Jost,sans-serif">UGC</div>User Generated Content</div>
+        <div class="pcard-name"><div class="picon" style="background:#6b8f5e;font-size:10px;font-family:Jost,sans-serif;font-weight:400">UGC</div>User Generated Content</div>
         <span class="spill spill-g">Outperforming</span>
       </div>
       <div class="pmg">
@@ -211,7 +250,7 @@ tr:hover td{background:rgba(237,231,219,.4)}
     </div>
     <div class="pcard" style="background:var(--warm);padding:24px;border:none">
       <div class="pcard-hdr" style="margin-bottom:16px">
-        <div class="pcard-name"><div class="picon" style="background:#a87c2a;font-size:10px;font-family:Jost,sans-serif">BRD</div>Brand Creative</div>
+        <div class="pcard-name"><div class="picon" style="background:#a87c2a;font-size:10px;font-family:Jost,sans-serif;font-weight:400">BRD</div>Brand Creative</div>
         <span class="spill spill-y">Monitor</span>
       </div>
       <div class="pmg">
@@ -230,37 +269,37 @@ tr:hover td{background:rgba(237,231,219,.4)}
     <div class="cc"><div class="ct">CTR — UGC vs Brand</div><div class="h200"><canvas id="cr-ugc-ctr"></canvas></div></div>
   </div>
 
-  <!-- ② Hook rate & 3-sec view rate -->
-  <div class="slabel">Hook Rate & 3-Second View Rate Analysis</div>
+  <!-- NEW ②: Hook rate & 3-sec view rate -->
+  <div class="slabel">Hook Rate & 3-Second View Rate — Real Data</div>
   <div class="kg g4" style="margin-bottom:8px">
     <div class="kpi"><div class="kpi-lbl">Best Hook Rate</div><div class="kpi-val" style="color:var(--green)">38.9%</div><div class="kpi-sub">Mary Pregnancy Set UGC Demo</div></div>
-    <div class="kpi"><div class="kpi-lbl">Avg Hook Rate</div><div class="kpi-val">21.2%</div><div class="kpi-sub">Across all video ads</div><div class="badge bg">Good — benchmark is 15%</div></div>
+    <div class="kpi"><div class="kpi-lbl">Avg Hook Rate</div><div class="kpi-val">21.2%</div><div class="kpi-sub">Across all video ads</div><div class="badge bg">↑ above 15% benchmark</div></div>
     <div class="kpi"><div class="kpi-lbl">Lowest Hook Rate</div><div class="kpi-val" style="color:var(--red)">10.1%</div><div class="kpi-sub">Mary PregnancySet2 UGC</div></div>
     <div class="kpi"><div class="kpi-lbl">Hook → ROAS Correlation</div><div class="kpi-val">0.61</div><div class="kpi-sub">Moderate positive signal</div></div>
   </div>
   <div class="cg cg2" style="margin-bottom:28px">
     <div class="cc"><div class="ct">Hook Rate by Ad (Top 12 by Spend)</div><div class="h240"><canvas id="cr-hook-chart"></canvas></div></div>
-    <div class="cc"><div class="ct">Hook Rate vs ROAS — Scatter</div><div class="h240"><canvas id="cr-hook-roas"></canvas></div></div>
+    <div class="cc"><div class="ct">Hook Rate vs ROAS Correlation</div><div class="h240"><canvas id="cr-hook-roas"></canvas></div></div>
   </div>
 
-  <!-- ③ Frequency & fatigue timeline -->
+  <!-- NEW ③: Frequency & fatigue -->
   <div class="slabel">Frequency & Fatigue Indicators</div>
   <div class="kg g4" style="margin-bottom:8px">
-    <div class="kpi"><div class="kpi-lbl">Highest Frequency</div><div class="kpi-val" style="color:var(--yellow)">1.35×</div><div class="kpi-sub">PAID_MotherDaySale_02 — watch</div></div>
-    <div class="kpi"><div class="kpi-lbl">Ads with Freq >1.2×</div><div class="kpi-val">4</div><div class="kpi-sub">SALE 1, MotherDay_02, Skin Spray, Lauren</div></div>
+    <div class="kpi"><div class="kpi-lbl">Highest Frequency</div><div class="kpi-val" style="color:var(--yellow)">1.35×</div><div class="kpi-sub">PAID_MotherDaySale_02</div></div>
+    <div class="kpi"><div class="kpi-lbl">Ads with Freq >1.2×</div><div class="kpi-val">4</div><div class="kpi-sub">SALE 1, MDay_02, Skin Spray, Lauren</div></div>
     <div class="kpi"><div class="kpi-lbl">Fatigue Risk</div><div class="kpi-val" style="color:var(--red)">3 ads</div><div class="kpi-sub">Freq >1.15 + ROAS declining</div></div>
     <div class="kpi"><div class="kpi-lbl">Healthy Range</div><div class="kpi-val" style="color:var(--green)">1.0–1.1×</div><div class="kpi-sub">35 of 50 ads in range</div></div>
   </div>
   <div class="cc" style="margin-bottom:28px;box-shadow:var(--shadow)">
-    <div class="ct">Frequency vs ROAS — Fatigue Map (bubble = spend)</div>
+    <div class="ct">Frequency vs ROAS — Fatigue Map (bubble size = spend)</div>
     <div class="h240"><canvas id="cr-fatigue-chart"></canvas></div>
   </div>
 
-  <!-- ④ Best performing hook styles -->
+  <!-- NEW ④: Best hook styles -->
   <div class="slabel">Best Performing Hook Styles</div>
   <div id="hook-styles-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);margin-bottom:28px;box-shadow:var(--shadow)"></div>
 
-  <!-- ⑤ Creative leaderboard (sortable) -->
+  <!-- NEW ⑤: Sortable leaderboard -->
   <div class="slabel">Creative Leaderboard — All Ads</div>
   <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
     <div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);align-self:center;margin-right:4px">Sort by</div>
@@ -279,36 +318,27 @@ tr:hover td{background:rgba(237,231,219,.4)}
     <table>
       <thead><tr>
         <th>#</th><th>Ad Name</th><th>Type</th>
-        <th style="cursor:pointer" onclick="sortLeaderboard('roas',null)">ROAS ↕</th>
-        <th style="cursor:pointer" onclick="sortLeaderboard('spend',null)">Spend ↕</th>
-        <th style="cursor:pointer" onclick="sortLeaderboard('hook',null)">Hook % ↕</th>
-        <th style="cursor:pointer" onclick="sortLeaderboard('ctr',null)">CTR ↕</th>
-        <th>Freq</th>
-        <th style="cursor:pointer" onclick="sortLeaderboard('cpc',null)">CPC ↕</th>
-        <th>CPM</th>
-        <th>Signal</th>
+        <th>ROAS ↕</th><th>Spend ↕</th><th>Hook % ↕</th>
+        <th>CTR ↕</th><th>Freq</th><th>CPC ↕</th><th>CPM</th><th>Signal</th>
       </tr></thead>
       <tbody id="leaderboard-tbody"></tbody>
     </table>
   </div>
 
-  <!-- ⑥ Creative brief generator -->
-  <div class="slabel">Creative Brief Generator — Based on Top Performers</div>
+  <!-- NEW ⑥: Creative brief generator -->
+  <div class="slabel">Creative Brief Generator</div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-bottom:28px;box-shadow:var(--shadow)">
     <div style="background:var(--warm);padding:28px">
-      <div style="font-size:9px;text-transform:uppercase;letter-spacing:3px;color:var(--muted);margin-bottom:16px">Generate a brief for</div>
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:3px;color:var(--muted);margin-bottom:16px">Generate a brief based on top performers</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
-        <div>
-          <div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:6px">Format</div>
+        <div><div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:6px">Format</div>
           <select id="brief-format" style="width:100%;padding:8px;border:1px solid var(--border);background:var(--cream);font-family:Jost,sans-serif;font-size:11px;color:var(--espresso)">
             <option value="ugc-video">UGC Video (15–30sec)</option>
             <option value="ugc-story">UGC Story (9×16)</option>
             <option value="brand-static">Brand Static Image</option>
             <option value="brand-video">Brand Video</option>
-          </select>
-        </div>
-        <div>
-          <div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:6px">Product</div>
+          </select></div>
+        <div><div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:6px">Product</div>
           <select id="brief-product" style="width:100%;padding:8px;border:1px solid var(--border);background:var(--cream);font-family:Jost,sans-serif;font-size:11px;color:var(--espresso)">
             <option value="pregnancy-set">Pregnancy Set</option>
             <option value="firming-serum">Firming Body Serum</option>
@@ -316,36 +346,31 @@ tr:hover td{background:rgba(237,231,219,.4)}
             <option value="belly-oil">Nourishing Belly Oil</option>
             <option value="stretch-cream">Stretch Mark Cream</option>
             <option value="skin-spray">HOCL Skin Spray</option>
-          </select>
-        </div>
-        <div>
-          <div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:6px">Hook Style</div>
+          </select></div>
+        <div><div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:6px">Hook Style</div>
           <select id="brief-hook" style="width:100%;padding:8px;border:1px solid var(--border);background:var(--cream);font-family:Jost,sans-serif;font-size:11px;color:var(--espresso)">
             <option value="problem">Problem → Solution</option>
             <option value="social-proof">Social Proof</option>
             <option value="routine">Daily Routine</option>
             <option value="emotional">Emotional / Gifting</option>
             <option value="transformation">Before / After</option>
-          </select>
-        </div>
-        <div>
-          <div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:6px">Talent</div>
+          </select></div>
+        <div><div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:6px">Talent</div>
           <select id="brief-talent" style="width:100%;padding:8px;border:1px solid var(--border);background:var(--cream);font-family:Jost,sans-serif;font-size:11px;color:var(--espresso)">
             <option value="mary">Mary (Founder)</option>
             <option value="ugc-creator">UGC Creator</option>
             <option value="no-talent">No Talent / Product Only</option>
-          </select>
-        </div>
+          </select></div>
       </div>
-      <button onclick="generateBrief()" style="width:100%;background:var(--espresso);color:var(--cream);border:none;padding:12px;font-family:Jost,sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:2px;cursor:pointer">Generate Brief ↗</button>
+      <button onclick="generateBrief()" style="width:100%;background:var(--espresso);color:var(--cream);border:none;padding:12px;font-family:Jost,sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:2px;cursor:pointer;font-weight:400">Generate Brief ↗</button>
     </div>
     <div style="background:var(--warm2);padding:28px" id="brief-output">
       <div style="font-size:9px;text-transform:uppercase;letter-spacing:3px;color:var(--muted);margin-bottom:16px">Brief Preview</div>
-      <div style="font-size:11px;color:var(--muted);font-style:italic">Select options and click Generate Brief →</div>
+      <div style="font-size:11px;color:var(--muted);font-style:italic">Select options and click Generate →</div>
     </div>
   </div>
 
-  <!-- ⑦ Landing page performance -->
+  <!-- NEW ⑦: Landing page performance -->
   <div class="slabel">Landing Page Performance — Top Ad Destinations</div>
   <div class="twrap">
     <div class="thead-bar">Page Performance by Ad Destination (Last 30D)</div>
