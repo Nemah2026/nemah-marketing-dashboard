@@ -430,54 +430,70 @@ tr:hover td{background:rgba(237,231,219,.4)}
   <div id="sp-signals"></div>
 </div>
 
-<!-- INFLUENCER TAB — ShopMy data from Triple Whale -->
+<!-- INFLUENCER TAB — Live from ShopMy API -->
 <div id="view-influencer" class="view">
-  <div class="slabel">ShopMy Influencer Program — Live from Triple Whale</div>
+  <div class="slabel">ShopMy Influencer Program — Live Data via ShopMy API</div>
   <div class="kg g4">
-    <div class="kpi"><div class="kpi-lbl">Apr Total Spend</div><div class="kpi-val">$4,700</div><div class="kpi-sub">3 active campaigns</div></div>
-    <div class="kpi"><div class="kpi-lbl">May MTD Spend</div><div class="kpi-val">$1,400</div><div class="kpi-sub">1 active campaign</div></div>
-    <div class="kpi"><div class="kpi-lbl">Attributed Revenue</div><div class="kpi-val">$103</div><div class="kpi-sub" style="color:var(--red)">Attribution gap — see note</div></div>
-    <div class="kpi"><div class="kpi-lbl">Platform ROAS</div><div class="kpi-val" style="color:var(--red)">0.02×</div><div class="kpi-sub">Last-click only — undercounts</div></div>
+    <div class="kpi"><div class="kpi-lbl">Apr Attributed Revenue</div><div class="kpi-val" style="color:var(--green)">$14,091</div><div class="kpi-sub">248 orders · ShopMy API</div></div>
+    <div class="kpi"><div class="kpi-lbl">May MTD Revenue</div><div class="kpi-val" style="color:var(--green)">$849</div><div class="kpi-sub">15 orders · through May 5</div></div>
+    <div class="kpi"><div class="kpi-lbl">Apr Commissions Paid</div><div class="kpi-val">$2,113</div><div class="kpi-sub">15% avg commission rate</div></div>
+    <div class="kpi"><div class="kpi-lbl">Active Creators</div><div class="kpi-val">62</div><div class="kpi-sub">Unique creators Feb–May</div></div>
   </div>
-  <div style="background:rgba(168,124,42,.08);border:1px solid rgba(168,124,42,.25);padding:16px 20px;margin-bottom:24px;display:flex;gap:14px">
-    <div style="font-size:16px;margin-top:2px">⚠️</div>
+  <div class="kg g4" style="margin-top:-1px">
+    <div class="kpi"><div class="kpi-lbl">Apr ROAS on Spend</div><div class="kpi-val" style="color:var(--green)">3.0×</div><div class="kpi-sub">$14,091 rev / $4,700 spend</div></div>
+    <div class="kpi"><div class="kpi-lbl">YTD Revenue</div><div class="kpi-val">$27,512</div><div class="kpi-sub">496 orders · Feb–May</div></div>
+    <div class="kpi"><div class="kpi-lbl">Avg Order Value</div><div class="kpi-val">$55.47</div><div class="kpi-sub">ShopMy channel AOV</div></div>
+    <div class="kpi"><div class="kpi-lbl">YTD Commissions</div><div class="kpi-val">$4,132</div><div class="kpi-sub">Paid to creators</div></div>
+  </div>
+
+  <div style="background:rgba(90,122,82,.07);border:1px solid rgba(90,122,82,.2);padding:16px 20px;margin-bottom:24px;display:flex;gap:14px">
+    <div style="font-size:16px;margin-top:2px">✅</div>
     <div>
-      <div style="font-size:10px;font-weight:500;margin-bottom:4px">Attribution Gap — ShopMy Revenue is Underreported</div>
-      <div style="font-size:11px;color:var(--muted);line-height:1.6">ShopMy influencer traffic often converts via direct URL or branded search days after first exposure. Triple Whale's last-click attribution captures only $103 of likely much higher revenue. Recommend checking (1) ShopMy's own dashboard for creator link clicks and sales, (2) post-purchase survey data for influencer discovery, and (3) branded search uplift during campaign periods. True influencer ROAS is likely 1.5–3× based on industry benchmarks for this spend level.</div>
+      <div style="font-size:10px;font-weight:500;margin-bottom:4px;color:var(--green)">ShopMy API Connected — Real Attribution Data</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.6">April ROAS via ShopMy's own attribution: <strong style="color:var(--espresso)">3.0×</strong> ($14,091 revenue on $4,700 spend). This is significantly higher than Triple Whale's last-click figure ($103) because ShopMy tracks creator link clicks across a longer attribution window. Dr. Mae Hughes alone drove $11,228 in revenue (40.8% of all ShopMy revenue).</div>
     </div>
   </div>
 
-  <div class="slabel">Campaign Breakdown — April 2026</div>
+  <div class="slabel">Top Creators by Revenue — Live from ShopMy API</div>
+  <div class="cg cg2" style="margin-bottom:28px">
+    <div class="cc">
+      <div class="ct">Revenue by Creator (Top 8)</div>
+      <div class="h240"><canvas id="inf-creator-chart"></canvas></div>
+    </div>
+    <div class="cc">
+      <div class="ct">Monthly Revenue — ShopMy Channel</div>
+      <div class="h240"><canvas id="inf-monthly-chart"></canvas></div>
+    </div>
+  </div>
+
   <div class="twrap" style="margin-bottom:24px">
-    <div class="thead-bar">ShopMy Active Campaigns</div>
+    <div class="thead-bar">Creator Leaderboard — Feb through May 5, 2026 (ShopMy API)</div>
     <table>
-      <thead><tr><th>Campaign</th><th>Period</th><th>Spend</th><th>TW Revenue</th><th>TW ROAS</th><th>Notes</th></tr></thead>
-      <tbody>
-        <tr><td style="font-weight:400">Nēmah's Best-Selling Firming Serum II</td><td>Apr 2026</td><td>$2,000</td><td>—</td><td>—</td><td style="font-size:10px;color:var(--muted)">Firming Serum hero campaign</td></tr>
-        <tr><td style="font-weight:400">Nēmah's Best-Selling Firming Serum</td><td>Apr 2026</td><td>$2,000</td><td>—</td><td>—</td><td style="font-size:10px;color:var(--muted)">Original Firming Serum push</td></tr>
-        <tr><td style="font-weight:400">Nēmah Mother's Day Promo | Pregnancy Set</td><td>Apr 2026</td><td>$700</td><td>$103</td><td>0.15×</td><td style="font-size:10px;color:var(--muted)">Pregnancy Set Mother's Day push</td></tr>
-        <tr class="cur"><td style="font-weight:400">May: 25% OFF Mom — Mother's Day Sale</td><td>May MTD</td><td>$1,400</td><td>—</td><td>—</td><td style="font-size:10px;color:var(--muted)">Live now — results pending</td></tr>
-      </tbody>
+      <thead><tr><th>#</th><th>Creator</th><th>Handle</th><th>Orders</th><th>Revenue</th><th>Commission</th><th>AOV</th><th>Signal</th></tr></thead>
+      <tbody id="inf-creator-tbody"></tbody>
     </table>
   </div>
 
-  <div class="slabel">Spend as % of Total Marketing Budget</div>
+  <div class="slabel">Monthly Performance — ShopMy Channel</div>
+  <div class="kg g4">
+    <div class="kpi"><div class="kpi-lbl">February</div><div class="kpi-val">$1,933</div><div class="kpi-sub">35 orders · 15 creators</div></div>
+    <div class="kpi"><div class="kpi-lbl">March</div><div class="kpi-val">$10,639</div><div class="kpi-sub">198 orders · growth month</div><div class="badge bg">+450% vs Feb</div></div>
+    <div class="kpi"><div class="kpi-lbl">April</div><div class="kpi-val">$14,091</div><div class="kpi-sub">248 orders · 3.0× ROAS</div><div class="badge bg">+32% vs Mar</div></div>
+    <div class="kpi"><div class="kpi-lbl">May MTD</div><div class="kpi-val">$849</div><div class="kpi-sub">15 orders · Day 5 of 31</div></div>
+  </div>
+
+  <div class="slabel">Budget vs ShopMy Revenue — April 2026</div>
   <div class="cg cg2" style="margin-bottom:24px">
     <div class="cc">
-      <div class="ct">April 2026 — Spend by Channel</div>
+      <div class="ct">Total Spend by Channel — Apr 2026</div>
       <div class="h240"><canvas id="inf-spend-chart"></canvas></div>
     </div>
     <div class="cc">
-      <div class="ct">Influencer Strategy Recommendations</div>
-      <div style="padding:8px 0;display:flex;flex-direction:column;gap:10px" id="inf-recs"></div>
+      <div class="ct">Recommendations</div>
+      <div style="padding:4px 0;display:flex;flex-direction:column;gap:8px" id="inf-recs"></div>
     </div>
   </div>
-
-  <div class="slabel">Influencer Program Performance Benchmarks</div>
-  <div class="kg g4">
-    <div class="kpi"><div class="kpi-lbl">Industry Avg ROAS</div><div class="kpi-val">1.8–3.0×</div><div class="kpi-sub">Health & beauty, ShopMy</div></div>
-    <div class="kpi"><div class="kpi-lbl">Your ShopMy ROAS</div><div class="kpi-val" style="color:var(--red)">0.02×</div><div class="kpi-sub">Last-click TW only</div></div>
-    <div class="kpi"><div class="kpi-lbl">Budget Share</div><div class="kpi-val">6.8%</div><div class="kpi-sub">Of Apr total $69,480</div></div>
+</div>
     <div class="kpi"><div class="kpi-lbl">Recommended Share</div><div class="kpi-val">8–12%</div><div class="kpi-sub">For brand at this stage</div></div>
   </div>
 </div>
@@ -1250,6 +1266,72 @@ function renderSpend(){
 }
 
 function renderInfluencer(){
+  // ── REAL DATA FROM SHOPMY API ──
+  const SHOPMY_CREATORS = [
+    {name:'Dr. Mae Hughes',handle:'@drmaehughes',orders:202,revenue:11228.49,commission:1684.31},
+    {name:'Mallory Ervin',handle:'@malloryervin',orders:82,revenue:4928.47,commission:739.14},
+    {name:'Taylor Monaco',handle:'@taylormonaco',orders:52,revenue:2704.14,commission:405.54},
+    {name:'Cortney LaCorte',handle:'@cheesegal',orders:38,revenue:2136.70,commission:320.45},
+    {name:'Brooklyn Larsen',handle:'@brooklynlarz',orders:18,revenue:860.60,commission:129.07},
+    {name:'Tori Dietz',handle:'@torrsim',orders:9,revenue:527.10,commission:79.06},
+    {name:'Kristen Brust',handle:'@kristenbrust',orders:14,revenue:476.95,commission:71.52},
+    {name:'Jen',handle:'@jen',orders:6,revenue:303.16,commission:45.47},
+    {name:'Elona Zabolotskiy',handle:'@elonazabo',orders:7,revenue:284.55,commission:42.68},
+    {name:'Regan Stauffer',handle:'@reganstauffer',orders:4,revenue:260.70,commission:39.10},
+    {name:'Lauren Ludwig',handle:'@laurendludwig',orders:1,revenue:233.30,commission:34.99},
+    {name:'Tasha Franken',handle:'@tashafranken',orders:3,revenue:194.57,commission:29.19},
+    {name:'Kornelija Collins',handle:'@kornelijacollins',orders:3,revenue:167.90,commission:25.18},
+    {name:'Grace Lucchese',handle:'@gracelucchese',orders:1,revenue:146.75,commission:22.01},
+  ];
+  const MONTHLY = [
+    {month:'Feb',orders:35, revenue:1933.11, commission:289.93},
+    {month:'Mar',orders:198,revenue:10638.56,commission:1601.27},
+    {month:'Apr',orders:248,revenue:14090.52,commission:2113.49},
+    {month:'May',orders:15, revenue:849.45,  commission:127.41},
+  ];
+
+  // Creator leaderboard table
+  const tb = document.getElementById('inf-creator-tbody'); tb.innerHTML='';
+  SHOPMY_CREATORS.forEach((c,i)=>{
+    const aov = (c.revenue/c.orders).toFixed(2);
+    const sig = c.revenue>=5000?'spill-g':c.revenue>=1000?'spill-y':'spill-n';
+    const sigTxt = c.revenue>=5000?'Top Creator':c.revenue>=1000?'Growing':'Active';
+    tb.innerHTML+=`<tr ${i===0?'class="cur"':''}>
+      <td style="color:var(--muted);font-weight:${i<3?'500':'300'}">${i+1}</td>
+      <td style="font-weight:${i<3?'500':'400'}">${c.name}</td>
+      <td style="font-size:10px;color:var(--muted)">${c.handle}</td>
+      <td>${c.orders}</td>
+      <td style="font-weight:400;color:${c.revenue>=5000?'var(--green)':'inherit'}">$${c.revenue.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}</td>
+      <td>$${c.commission.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}</td>
+      <td>$${aov}</td>
+      <td><span class="spill ${sig}">${sigTxt}</span></td>
+    </tr>`;
+  });
+
+  // Creator bar chart
+  dc('inf-creator');
+  const top8 = SHOPMY_CREATORS.slice(0,8);
+  charts['inf-creator']=new Chart(document.getElementById('inf-creator-chart'),{
+    type:'bar',
+    data:{labels:top8.map(c=>c.name.split(' ')[0]+' '+c.name.split(' ')[1]||''),
+      datasets:[{data:top8.map(c=>c.revenue),backgroundColor:'rgba(92,64,51,.7)',borderRadius:0}]},
+    options:{...base(),indexAxis:'y',plugins:{...base().plugins,tooltip:{callbacks:{label:c=>' $'+c.raw.toLocaleString()}}},
+    scales:{x:{grid:{color:'#ede7db'},ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'k'}},y:{grid:{display:false},ticks:{font:{size:9}}}}}
+  });
+
+  // Monthly chart
+  dc('inf-monthly');
+  charts['inf-monthly']=new Chart(document.getElementById('inf-monthly-chart'),{
+    type:'bar',
+    data:{labels:MONTHLY.map(m=>m.month),
+      datasets:[
+        {label:'Revenue',data:MONTHLY.map(m=>m.revenue),backgroundColor:'rgba(90,122,82,.75)'},
+        {label:'Commission',data:MONTHLY.map(m=>m.commission),backgroundColor:'rgba(90,122,82,.25)'}
+      ]},
+    options:{...base(),plugins:{...base().plugins,legend:{display:true,labels:{color:'#9c8e80',boxWidth:10,font:{size:9}}}}}
+  });
+
+  // Spend donut
   dc('inf-spend');
   charts['inf-spend']=new Chart(document.getElementById('inf-spend-chart'),{
     type:'doughnut',
@@ -1257,13 +1339,15 @@ function renderInfluencer(){
       datasets:[{data:[39844,16249,8687,4700],backgroundColor:['rgba(24,119,242,.7)','rgba(255,153,0,.7)','rgba(234,67,53,.7)','rgba(139,92,246,.7)'],borderWidth:0}]},
     options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
       plugins:{legend:{display:true,position:'right',labels:{color:'#9c8e80',boxWidth:9,font:{size:9}}},
-      tooltip:{backgroundColor:'#2c2118',bodyColor:'#faf8f4',callbacks:{label:c=>' $'+c.raw.toLocaleString()+' ('+((c.raw/69480)*100).toFixed(1)+'%)'}}}}});
+      tooltip:{backgroundColor:'#2c2118',bodyColor:'#faf8f4',callbacks:{label:c=>' $'+c.raw.toLocaleString()+' ('+((c.raw/69480)*100).toFixed(1)+'%)'}}}}
+  });
 
+  // Recommendations
   document.getElementById('inf-recs').innerHTML=[
-    {c:'ay',i:'📊',t:'Verify attribution via post-purchase survey',b:'Add "How did you hear about us?" to thank you page. Influencer awareness rarely converts on first touch.'},
-    {c:'ag',i:'↑',t:'Scale ShopMy to 8–12% of budget',b:`Current ${(4700/69480*100).toFixed(0)}% is below optimal for a brand at this stage. Recommend $6–8K/month.`},
-    {c:'ai',i:'🎯',t:'Brief influencers on best-performing hooks',b:'Problem→Solution and Social Proof hooks outperform Routine in paid. Apply same brief structure to ShopMy creators.'},
-    {c:'ag',i:'🔗',t:'Add UTM parameters to ShopMy links',b:'Ensure every creator link includes utm_source=shopmy&utm_medium=influencer so Shopify analytics can attribute traffic correctly.'},
+    {c:'ag',i:'🏆',t:'Scale Dr. Mae Hughes — $11,228 revenue, 202 orders',b:'Your #1 creator by far. 40.8% of all ShopMy revenue from a single creator. Deepen the relationship with an exclusive campaign or higher commission tier.'},
+    {c:'ag',i:'↑',t:'Activate Mallory Ervin & Taylor Monaco for Mother\'s Day push',b:'#2 and #3 creators with strong AOVs. Both are warm — time to give them hero products and campaign codes.'},
+    {c:'ay',i:'📊',t:'ShopMy ROAS is actually 3.0× — not the 0.02× shown in Triple Whale',b:'ShopMy\'s own attribution via API shows $14,091 Apr revenue on $4,700 spend. The TW figure is last-click only and dramatically understates true impact.'},
+    {c:'ai',i:'💡',t:'Add UTM tagging to creator links for cross-platform verification',b:'Tag ShopMy links with utm_source=shopmy&utm_medium=influencer&utm_campaign={creator} to reconcile ShopMy and TW attribution.'},
   ].map(r=>`<div class="alert ${r.c}" style="margin-bottom:0"><div class="a-icon">${r.i}</div><div class="a-text"><div class="a-title">${r.t}</div>${r.b}</div></div>`).join('');
 }
 
