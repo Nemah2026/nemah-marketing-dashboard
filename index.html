@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nēmah — Marketing Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:#faf8f4; --warm:#f3efe7; --warm2:#ede7db; --border:#ddd6c8; --border2:#c9beae;
+  --espresso:#2c2118; --brown:#5c4033; --muted:#9c8e80; --light:#bdb0a0;
+  --green:#5a7a52; --yellow:#a87c2a; --red:#9e3a2a;
+  --meta:#1877f2; --google:#ea4335; --organic:#6b8f5e; --direct:#c47b1a; --influencer:#8b5cf6;
+  --shadow:0 1px 3px rgba(44,33,24,.06),0 4px 16px rgba(44,33,24,.04);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--cream);color:var(--espresso);font-family:'Jost',sans-serif;font-weight:300;min-height:100vh;}
+
+/* HEADER */
+.header{background:var(--espresso);padding:0 48px;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:200;}
+.header-brand{display:flex;align-items:center;gap:20px;}
+.logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;font-style:italic;color:var(--cream);letter-spacing:.5px;}
+.hdiv{width:1px;height:20px;background:rgba(250,248,244,.15);}
+.dash-name{font-size:10px;text-transform:uppercase;letter-spacing:4px;color:rgba(250,248,244,.45);font-weight:400;}
+.hstats{display:flex;align-items:center;gap:28px;}
+.hstat{text-align:right;}
+.hstat-lbl{font-size:8px;text-transform:uppercase;letter-spacing:2.5px;color:rgba(250,248,244,.4);margin-bottom:2px;}
+.hstat-val{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:300;color:var(--cream);}
+.live-pill{display:flex;align-items:center;gap:6px;font-size:8px;text-transform:uppercase;letter-spacing:2px;color:#a8c9a0;border:1px solid rgba(168,201,160,.3);padding:4px 10px;}
+.live-dot{width:5px;height:5px;border-radius:50%;background:#a8c9a0;animation:pulse 2.5s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* DATE BAR */
+.date-bar{background:var(--warm);border-bottom:1px solid var(--border);padding:10px 48px;display:flex;align-items:center;gap:10px;position:sticky;top:64px;z-index:150;}
+.date-lbl{font-size:8px;text-transform:uppercase;letter-spacing:3px;color:var(--light);margin-right:4px;}
+.preset{padding:5px 14px;font-family:'Jost',sans-serif;font-size:9px;text-transform:uppercase;letter-spacing:2px;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .15s;font-weight:400;}
+.preset:hover{border-color:var(--espresso);color:var(--espresso);}
+.preset.on{background:var(--espresso);color:var(--cream);border-color:var(--espresso);}
+.date-sep{width:1px;height:20px;background:var(--border);margin:0 6px;}
+.date-in{font-family:'Jost',sans-serif;font-size:10px;padding:5px 10px;border:1px solid var(--border);background:var(--cream);color:var(--espresso);cursor:pointer;font-weight:300;}
+.apply-btn{padding:6px 16px;font-family:'Jost',sans-serif;font-size:9px;text-transform:uppercase;letter-spacing:2px;background:var(--espresso);color:var(--cream);border:none;cursor:pointer;transition:opacity .2s;font-weight:400;}
+.apply-btn:hover{opacity:.8;}
+.apply-btn:disabled{opacity:.4;cursor:not-allowed;}
+.date-info{margin-left:auto;font-size:10px;color:var(--muted);display:flex;align-items:center;gap:8px;}
+.fetch-ring{width:12px;height:12px;border:1.5px solid var(--border2);border-top-color:var(--espresso);border-radius:50%;animation:spin .6s linear infinite;display:none;}
+.fetch-ring.on{display:block;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* TABS */
+.nav{background:var(--warm);border-bottom:1px solid var(--border);padding:0 48px;display:flex;position:sticky;top:106px;z-index:100;}
+.tab{padding:13px 22px;font-size:10px;text-transform:uppercase;letter-spacing:2.5px;color:var(--muted);cursor:pointer;border-bottom:1.5px solid transparent;transition:all .15s;font-weight:400;}
+.tab:hover{color:var(--espresso);}
+.tab.active{color:var(--espresso);border-bottom-color:var(--espresso);}
+
+/* MAIN */
+.main{padding:36px 48px;max-width:1440px;margin:0 auto;}
+.view{display:none;}
+.view.active{display:block;}
+
+.slabel{font-size:8px;text-transform:uppercase;letter-spacing:3.5px;color:var(--light);margin-bottom:20px;margin-top:36px;display:flex;align-items:center;gap:14px;font-weight:400;}
+.slabel:first-child{margin-top:0;}
+.slabel::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* KPI */
+.kg{display:grid;gap:1px;background:var(--border);margin-bottom:28px;box-shadow:var(--shadow);}
+.g5{grid-template-columns:repeat(5,1fr);}
+.g4{grid-template-columns:repeat(4,1fr);}
+.g3{grid-template-columns:repeat(3,1fr);}
+.g2{grid-template-columns:repeat(2,1fr);}
+.kpi{background:var(--warm);padding:22px 24px;}
+.kpi-lbl{font-size:8px;text-transform:uppercase;letter-spacing:3px;color:var(--muted);margin-bottom:10px;font-weight:400;}
+.kpi-val{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;line-height:1;margin-bottom:6px;}
+.kpi-sub{font-size:10px;color:var(--muted);}
+.badge{display:inline-block;font-size:9px;padding:3px 10px;margin-top:8px;}
+.bg{background:rgba(90,122,82,.1);color:var(--green);}
+.by{background:rgba(168,124,42,.1);color:var(--yellow);}
+.br{background:rgba(158,58,42,.1);color:var(--red);}
+.bn{background:var(--warm2);color:var(--muted);}
+
+/* CHARTS */
+.cg{display:grid;gap:1px;background:var(--border);margin-bottom:28px;box-shadow:var(--shadow);}
+.cg2{grid-template-columns:1fr 1fr;}
+.cc{background:var(--warm);padding:24px 28px;}
+.ct{font-size:8px;text-transform:uppercase;letter-spacing:3px;color:var(--muted);margin-bottom:20px;font-weight:400;}
+.h240{height:240px;position:relative;}
+.h200{height:200px;position:relative;}
+.h180{height:180px;position:relative;}
+
+/* TABLE */
+.twrap{background:var(--warm);border:1px solid var(--border);margin-bottom:28px;overflow:hidden;box-shadow:var(--shadow);}
+.thead-bar{padding:16px 28px;background:var(--warm2);border-bottom:1px solid var(--border);font-size:8px;text-transform:uppercase;letter-spacing:3px;color:var(--muted);font-weight:400;}
+table{width:100%;border-collapse:collapse;}
+th{padding:10px 20px;font-size:8px;text-transform:uppercase;letter-spacing:2px;color:var(--light);border-bottom:1px solid var(--border);text-align:left;background:var(--warm2);font-weight:400;}
+th:not(:first-child){text-align:right;}
+td{padding:12px 20px;font-size:11px;border-bottom:1px solid var(--border);font-weight:300;}
+td:not(:first-child){text-align:right;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(237,231,219,.4);}
+
+/* CHANNEL BAR */
+.ch-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);}
+.ch-row:last-child{border-bottom:none;}
+.ch-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.ch-name{width:140px;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--espresso);font-weight:400;}
+.ch-track{flex:1;height:3px;background:var(--warm2);}
+.ch-fill{height:100%;transition:width .8s ease;}
+.ch-val{width:70px;text-align:right;font-size:11px;}
+.ch-pct{width:42px;text-align:right;font-size:10px;color:var(--muted);}
+
+/* ALERTS */
+.alert{padding:14px 20px;margin-bottom:10px;display:flex;gap:14px;border-left:2px solid;}
+.ag{border-color:var(--green);background:rgba(90,122,82,.05);}
+.ar{border-color:var(--red);background:rgba(158,58,42,.05);}
+.ay{border-color:var(--yellow);background:rgba(168,124,42,.05);}
+.ai{border-color:var(--brown);background:rgba(92,64,51,.05);}
+.a-icon{font-size:14px;margin-top:1px;flex-shrink:0;}
+.a-text{font-size:11px;line-height:1.6;}
+.a-title{font-weight:500;margin-bottom:2px;}
+
+/* PLATFORM CARDS */
+.platform-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-bottom:28px;box-shadow:var(--shadow);}
+.pcard{background:var(--warm);padding:24px;}
+.pcard-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.pcard-name{display:flex;align-items:center;gap:10px;font-size:10px;text-transform:uppercase;letter-spacing:2px;font-weight:400;}
+.picon{width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;}
+.pm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);margin-bottom:16px;}
+.pm{background:var(--warm2);padding:12px;}
+.pm-lbl{font-size:8px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:4px;font-weight:400;}
+.pm-val{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;}
+
+/* CREATIVE CARDS */
+.creative-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);margin-bottom:28px;}
+.ccard{background:var(--warm);display:flex;flex-direction:column;}
+.cthumb{width:100%;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.cbadge{position:absolute;top:10px;left:10px;font-size:7px;text-transform:uppercase;letter-spacing:1.5px;padding:3px 8px;font-family:'Jost',sans-serif;font-weight:400;}
+.b-video{background:rgba(44,33,24,.7);color:var(--cream);}
+.b-image{background:rgba(44,33,24,.7);color:var(--cream);}
+.b-google{background:rgba(234,67,53,.8);color:white;}
+.crank{position:absolute;top:10px;right:10px;width:22px;height:22px;background:var(--espresso);color:var(--cream);font-size:9px;display:flex;align-items:center;justify-content:center;font-family:'Jost',sans-serif;}
+.cvisual{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:12px;font-style:italic;text-align:center;padding:20px;line-height:1.6;}
+.cmeta{padding:16px;flex:1;}
+.cname{font-size:10px;font-weight:500;margin-bottom:4px;line-height:1.4;}
+.chook{font-size:9px;color:var(--muted);margin-bottom:12px;font-style:italic;line-height:1.4;}
+.cstats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);}
+.cs{background:var(--warm2);padding:8px 10px;}
+.cs-lbl{font-size:7px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:3px;font-weight:400;}
+.cs-val{font-size:11px;font-weight:400;}
+.cflag{padding:8px 16px;font-size:8px;text-transform:uppercase;letter-spacing:1.5px;border-top:1px solid var(--border);display:flex;align-items:center;gap:6px;font-weight:400;}
+.f-scale{background:rgba(90,122,82,.08);color:var(--green);}
+.f-watch{background:rgba(168,124,42,.08);color:var(--yellow);}
+.f-pause{background:rgba(158,58,42,.08);color:var(--red);}
+.f-test{background:rgba(92,64,51,.06);color:var(--brown);}
+
+/* PILL */
+.spill{display:inline-block;padding:3px 10px;font-size:8px;text-transform:uppercase;letter-spacing:1.5px;font-weight:400;}
+.spill-g{background:rgba(90,122,82,.1);color:var(--green);}
+.spill-y{background:rgba(168,124,42,.1);color:var(--yellow);}
+.spill-r{background:rgba(158,58,42,.1);color:var(--red);}
+.spill-n{background:var(--warm2);color:var(--muted);}
+
+/* LOADING */
+.loader{position:fixed;inset:0;background:rgba(250,248,244,.9);display:none;align-items:center;justify-content:center;z-index:500;flex-direction:column;gap:20px;}
+.loader.on{display:flex;}
+.lring{width:32px;height:32px;border:1.5px solid var(--border2);border-top-color:var(--espresso);border-radius:50%;animation:spin .8s linear infinite;}
+.ltxt{font-size:9px;text-transform:uppercase;letter-spacing:3px;color:var(--muted);font-weight:400;}
+
+@media(max-width:1100px){.g5,.g4{grid-template-columns:repeat(2,1fr);}.cg2,.platform-grid,.creative-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<div class="loader" id="loader"><div class="lring"></div><div class="ltxt" id="ltxt">Loading…</div></div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-brand">
+    <div class="logo">Nēmah</div>
+    <div class="hdiv"></div>
+    <div class="dash-name">Marketing & Growth</div>
+  </div>
+  <div class="hstats">
+    <div class="hstat"><div class="hstat-lbl">Blended ROAS</div><div class="hstat-val" id="hdr-roas">—</div></div>
+    <div class="hstat"><div class="hstat-lbl">Total Spend</div><div class="hstat-val" id="hdr-spend">—</div></div>
+    <div class="hstat"><div class="hstat-lbl">CPA</div><div class="hstat-val" id="hdr-cpa">—</div></div>
+    <div class="hstat"><div class="hstat-lbl">CVR</div><div class="hstat-val" id="hdr-cvr">—</div></div>
+    <div class="live-pill"><div class="live-dot"></div><span id="hdr-ts">Live</span></div>
+  </div>
+</header>
+
+<!-- DATE BAR -->
+<div class="date-bar">
+  <div class="date-lbl">Period</div>
+  <button class="preset" onclick="setPreset('7d',this)">7D</button>
+  <button class="preset" onclick="setPreset('14d',this)">14D</button>
+  <button class="preset on" onclick="setPreset('mtd',this)">MTD</button>
+  <button class="preset" onclick="setPreset('30d',this)">30D</button>
+  <button class="preset" onclick="setPreset('90d',this)">90D</button>
+  <button class="preset" onclick="setPreset('ytd',this)">YTD</button>
+  <div class="date-sep"></div>
+  <input type="date" class="date-in" id="d-from" value="2026-05-01">
+  <span style="color:var(--light);font-size:11px">→</span>
+  <input type="date" class="date-in" id="d-to" value="2026-05-05">
+  <button class="apply-btn" id="apply-btn" onclick="applyRange()">Apply</button>
+  <div class="date-info">
+    <div class="fetch-ring" id="fetch-ring"></div>
+    <span id="range-label">May 1 – May 5, 2026 (MTD)</span>
+  </div>
+</div>
+
+<!-- TABS -->
+<nav class="nav">
+  <div class="tab active" onclick="showTab('overview',this)">Overview</div>
+  <div class="tab" onclick="showTab('creative',this)">Creative Analysis</div>
+  <div class="tab" onclick="showTab('acquisition',this)">Acquisition</div>
+  <div class="tab" onclick="showTab('conversion',this)">Conversion & AOV</div>
+  <div class="tab" onclick="showTab('spend',this)">Spend</div>
+</nav>
+
+<div class="main">
+
+<!-- OVERVIEW -->
+<div id="view-overview" class="view active">
+  <div class="slabel">Marketing Snapshot</div>
+  <div class="kg g5">
+    <div class="kpi"><div class="kpi-lbl">Revenue</div><div class="kpi-val" id="ov-rev">—</div><div class="kpi-sub" id="ov-rev-sub">—</div></div>
+    <div class="kpi"><div class="kpi-lbl">Total Ad Spend</div><div class="kpi-val" id="ov-spend">—</div><div class="kpi-sub">Meta + Google</div></div>
+    <div class="kpi"><div class="kpi-lbl">Blended ROAS</div><div class="kpi-val" id="ov-roas">—</div><div class="kpi-sub" id="ov-roas-sub">—</div></div>
+    <div class="kpi"><div class="kpi-lbl">CPA</div><div class="kpi-val" id="ov-cpa">—</div><div class="kpi-sub" id="ov-orders">—</div></div>
+    <div class="kpi"><div class="kpi-lbl">CVR</div><div class="kpi-val" id="ov-cvr">—</div><div class="kpi-sub" id="ov-sess">—</div></div>
+  </div>
+  <div class="cg cg2">
+    <div class="cc"><div class="ct">Daily Revenue vs Ad Spend</div><div class="h240"><canvas id="ov-rev-chart"></canvas></div></div>
+    <div class="cc"><div class="ct">Traffic by Channel</div><div class="h240"><canvas id="ov-traffic-chart"></canvas></div></div>
+  </div>
+  <div class="slabel">Key Signals</div>
+  <div id="ov-signals"></div>
+</div>
+
+<!-- CREATIVE -->
+<div id="view-creative" class="view">
+  <div class="slabel">Creative Type Performance — Meta</div>
+  <div class="platform-grid">
+    <div class="pcard">
+      <div class="pcard-header"><div class="pcard-name"><div class="picon" style="background:#6b8f5e">▶</div>Video</div><span class="spill" id="cr-vid-pill">—</span></div>
+      <div class="pm-grid">
+        <div class="pm"><div class="pm-lbl">Spend</div><div class="pm-val" id="cr-vid-spend">—</div></div>
+        <div class="pm"><div class="pm-lbl">ROAS</div><div class="pm-val" id="cr-vid-roas">—</div></div>
+        <div class="pm"><div class="pm-lbl">CTR</div><div class="pm-val" id="cr-vid-ctr">—</div></div>
+      </div>
+    </div>
+    <div class="pcard">
+      <div class="pcard-header"><div class="pcard-name"><div class="picon" style="background:#a87c2a">▣</div>Image</div><span class="spill" id="cr-img-pill">—</span></div>
+      <div class="pm-grid">
+        <div class="pm"><div class="pm-lbl">Spend</div><div class="pm-val" id="cr-img-spend">—</div></div>
+        <div class="pm"><div class="pm-lbl">ROAS</div><div class="pm-val" id="cr-img-roas">—</div></div>
+        <div class="pm"><div class="pm-lbl">CTR</div><div class="pm-val" id="cr-img-ctr">—</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="cg cg2" style="margin-bottom:28px">
+    <div class="cc"><div class="ct">ROAS by Creative Type</div><div class="h180"><canvas id="cr-roas-chart"></canvas></div></div>
+    <div class="cc"><div class="ct">CTR by Creative Type</div><div class="h180"><canvas id="cr-ctr-chart"></canvas></div></div>
+  </div>
+  <div class="slabel">Top Ads by Spend — Creative Scorecard</div>
+  <div class="creative-grid" id="creative-cards">
+    <div style="grid-column:1/-1;padding:40px;text-align:center;background:var(--warm);color:var(--muted);font-size:11px">Loading…</div>
+  </div>
+  <div class="slabel">Winning Headlines</div>
+  <div class="twrap">
+    <div class="thead-bar">Top Ads by ROAS (min. $10 spend)</div>
+    <table><thead><tr><th>Ad / Headline</th><th>Channel</th><th>Spend</th><th>Revenue</th><th>ROAS</th><th>CTR</th><th>Signal</th></tr></thead>
+    <tbody id="cr-headlines"></tbody></table>
+  </div>
+  <div class="slabel">Creative Strategist Recommendations</div>
+  <div id="cr-recs"></div>
+</div>
+
+<!-- ACQUISITION -->
+<div id="view-acquisition" class="view">
+  <div class="slabel">Traffic & Channel Performance</div>
+  <div class="kg g4">
+    <div class="kpi"><div class="kpi-lbl">Total Sessions</div><div class="kpi-val" id="acq-sess">—</div></div>
+    <div class="kpi"><div class="kpi-lbl">Paid Sessions</div><div class="kpi-val" id="acq-paid">—</div><div class="kpi-sub">Meta + Google</div></div>
+    <div class="kpi"><div class="kpi-lbl">Organic + Direct</div><div class="kpi-val" id="acq-organic">—</div></div>
+    <div class="kpi"><div class="kpi-lbl">Total Orders</div><div class="kpi-val" id="acq-orders">—</div></div>
+  </div>
+  <div class="cg cg2">
+    <div class="cc">
+      <div class="ct">Sessions by Channel</div>
+      <div id="acq-ch-rows" style="padding:8px 0"></div>
+    </div>
+    <div class="cc"><div class="ct">ROAS by Platform</div><div class="h240"><canvas id="acq-roas"></canvas></div></div>
+  </div>
+</div>
+
+<!-- CONVERSION -->
+<div id="view-conversion" class="view">
+  <div class="slabel">Conversion & AOV</div>
+  <div class="kg g4">
+    <div class="kpi"><div class="kpi-lbl">Conversion Rate</div><div class="kpi-val" id="cv-cvr">—</div><div class="kpi-sub">Industry avg: 2–4%</div></div>
+    <div class="kpi"><div class="kpi-lbl">AOV</div><div class="kpi-val" id="cv-aov">—</div></div>
+    <div class="kpi"><div class="kpi-lbl">Revenue / Session</div><div class="kpi-val" id="cv-rps">—</div></div>
+    <div class="kpi"><div class="kpi-lbl">Orders</div><div class="kpi-val" id="cv-orders">—</div></div>
+  </div>
+  <div class="cg cg2">
+    <div class="cc"><div class="ct">Daily Revenue vs Orders</div><div class="h240"><canvas id="cv-chart"></canvas></div></div>
+    <div class="cc"><div class="ct">AOV Uplift Scenarios</div><div class="h240"><canvas id="cv-aov-chart"></canvas></div></div>
+  </div>
+</div>
+
+<!-- SPEND -->
+<div id="view-spend" class="view">
+  <div class="slabel">Spend Efficiency</div>
+  <div class="kg g4">
+    <div class="kpi"><div class="kpi-lbl">Total Spend</div><div class="kpi-val" id="sp-total">—</div></div>
+    <div class="kpi"><div class="kpi-lbl">Meta</div><div class="kpi-val" id="sp-meta">—</div><div class="kpi-sub" id="sp-meta-sub">—</div></div>
+    <div class="kpi"><div class="kpi-lbl">Google</div><div class="kpi-val" id="sp-google">—</div><div class="kpi-sub" id="sp-google-sub">—</div></div>
+    <div class="kpi"><div class="kpi-lbl">CPA</div><div class="kpi-val" id="sp-cpa">—</div></div>
+  </div>
+  <div class="cg cg2">
+    <div class="cc"><div class="ct">Daily Spend — Meta vs Google</div><div class="h240"><canvas id="sp-daily"></canvas></div></div>
+    <div class="cc"><div class="ct">ROAS by Platform</div><div class="h240"><canvas id="sp-roas"></canvas></div></div>
+  </div>
+  <div id="sp-signals"></div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+// ── CHART DEFAULTS ──
+Chart.defaults.color='#9c8e80';Chart.defaults.borderColor='#ddd6c8';
+Chart.defaults.font.family="'Jost',sans-serif";Chart.defaults.font.size=10;Chart.defaults.font.weight='300';
+
+const charts={};
+function dc(k){if(charts[k]){charts[k].destroy();delete charts[k];}}
+
+const base=(extra={})=>({
+  responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false},tooltip:{backgroundColor:'#2c2118',titleColor:'#9c8e80',bodyColor:'#faf8f4',borderWidth:0,padding:10,cornerRadius:0}},
+  scales:{x:{grid:{color:'#ede7db'},ticks:{maxTicksLimit:10}},y:{grid:{color:'#ede7db'},ticks:{callback:v=>v>=1000?'$'+(v/1000).toFixed(0)+'k':v}}},
+  ...extra
+});
+
+// ── DATA SNAPSHOTS per period ──
+// May MTD (May 1-5) — live from Shopify + TW
+const SNAP = {
+  'mtd': {
+    revenue:25144, spend:9949, roas:2.55, pixelRoas:3.8, cpa:26.25, cvr:0.044,
+    sessions:9173, orders:404, aov:62.24,
+    metaSpend:6671, metaRoas:2.0, metaCpa:32.10,
+    googleSpend:1737, googleRoas:6.26, googleCpa:12.40,
+    metaSess:4680, directSess:1780, googleSess:1250, influencerSess:755, organicSess:708,
+    videoSpend:4820, videoRoas:2.1, videoCtr:0.0162,
+    imageSpend:1250, imageRoas:1.45, imageCtr:0.0084,
+    dailyRev:[7166,4892,5226,5730,2130],
+    dailyMeta:[1362,1298,1341,1387,1283],
+    dailyGoogle:[352,338,362,378,307],
+    dailyDates:['May 1','May 2','May 3','May 4','May 5'],
+    topAds:[
+      {ch:'meta',name:'Mother\'s Day — Pregnancy Set UGC',spend:1840,roas:2.42,ctr:0.0198,impressions:42000},
+      {ch:'google',name:'Google Search — Gift Mothers Day',spend:1250,roas:5.90,ctr:0.0048,impressions:180000},
+      {ch:'meta',name:'Motherhood Creative — Ad Set B',spend:1380,roas:2.15,ctr:0.0175,impressions:58000},
+      {ch:'meta',name:'Firming Serum UGC — 30sec',spend:980,roas:1.62,ctr:0.0142,impressions:38000},
+      {ch:'meta',name:'Scar Cream Testimonial Video',spend:810,roas:1.38,ctr:0.0118,impressions:31000},
+      {ch:'meta',name:'IWD Static Image — Best Value',spend:401,roas:1.85,ctr:0.0061,impressions:28000},
+    ],
+    topRoasAds:[
+      {ch:'google',name:'"She\'s been running on empty — give her the gift of Nēmah"',spend:14.20,roas:72.4,revenue:1028,ctr:0.341},
+      {ch:'google',name:'"At Nemah, we provide vegan, safe, reliable skincare for every stage"',spend:412,roas:48.6,revenue:20011,ctr:0.261},
+      {ch:'meta',name:'Mother\'s Day Pregnancy Set — 3sec Hook UGC',spend:2.80,roas:68.2,revenue:191,ctr:0},
+      {ch:'meta',name:'Mother\'s Day — Pregnancy Set UGC (Full)',spend:1840,roas:2.42,revenue:4453,ctr:0.0198},
+    ]
+  },
+  '7d': {
+    revenue:25144, spend:9949, roas:2.55, pixelRoas:3.8, cpa:26.25, cvr:0.044,
+    sessions:9173, orders:404, aov:62.24,
+    metaSpend:6671, metaRoas:2.0, googleSpend:1737, googleRoas:6.26, cpa:26.25,
+    metaSess:4680, directSess:1780, googleSess:1250, influencerSess:755, organicSess:708,
+    videoSpend:4820, videoRoas:2.1, videoCtr:0.0162,
+    imageSpend:1250, imageRoas:1.45, imageCtr:0.0084,
+    dailyRev:[7166,4892,5226,5730,2130], dailyMeta:[1362,1298,1341,1387,1283], dailyGoogle:[352,338,362,378,307],
+    dailyDates:['May 1','May 2','May 3','May 4','May 5'],
+    topAds:[
+      {ch:'meta',name:'Mother\'s Day — Pregnancy Set UGC',spend:1840,roas:2.42,ctr:0.0198,impressions:42000},
+      {ch:'google',name:'Google Search — Gift Mothers Day',spend:1250,roas:5.90,ctr:0.0048,impressions:180000},
+      {ch:'meta',name:'Motherhood Creative — Ad Set B',spend:1380,roas:2.15,ctr:0.0175,impressions:58000},
+      {ch:'meta',name:'Firming Serum UGC — 30sec',spend:980,roas:1.62,ctr:0.0142,impressions:38000},
+      {ch:'meta',name:'Scar Cream Testimonial Video',spend:810,roas:1.38,ctr:0.0118,impressions:31000},
+      {ch:'meta',name:'IWD Static Image — Best Value',spend:401,roas:1.85,ctr:0.0061,impressions:28000},
+    ],
+    topRoasAds:[
+      {ch:'google',name:'"She\'s been running on empty"',spend:14.20,roas:72.4,revenue:1028,ctr:0.341},
+      {ch:'google',name:'"At Nemah, we provide vegan, safe, reliable skincare"',spend:412,roas:48.6,revenue:20011,ctr:0.261},
+    ]
+  },
+  '30d': {
+    revenue:168960, spend:64389, roas:2.50, pixelRoas:4.02, cpa:27.40, cvr:0.0558,
+    sessions:76417, orders:2803, aov:60.28,
+    metaSpend:44527, metaRoas:1.82, googleSpend:9833, googleRoas:6.24,
+    metaSess:38200, directSess:14500, googleSess:10250, influencerSess:7200, organicSess:6267,
+    videoSpend:31600, videoRoas:1.72, videoCtr:0.0155,
+    imageSpend:8180, imageRoas:1.22, imageCtr:0.0081,
+    dailyRev:[4270,5221,3883,3125,4162,4439,7473,7034,5400,4307,3404,4200,2281,3355,3962,4217,4198,3168,3207,4440,4134,6822,6893,5645,5005,5169,5285,10057,9081,7166],
+    dailyMeta:[1303,1154,1274,1276,1260,1360,1190,1169,1281,1239,1240,1271,1207,1183,1207,1276,1326,1249,1259,1192,1166,1681,1300,1407,1421,1575,1699,2014,683,1362],
+    dailyGoogle:[289,328,271,244,299,289,265,232,249,244,240,267,264,238,269,199,233,235,274,234,238,264,247,266,277,350,505,494,291,352],
+    dailyDates:Array.from({length:30},(_,i)=>{const d=new Date('2026-04-06');d.setDate(d.getDate()+i);return `${d.getMonth()+1}/${d.getDate()}`;}),
+    topAds:[
+      {ch:'meta',name:'UGC Scar Demo — Mary 30sec',spend:6390,roas:1.18,ctr:0.0181,impressions:228900},
+      {ch:'google',name:'Google Ads Campaign — Main',spend:6220,roas:2.01,ctr:0.0052,impressions:709459},
+      {ch:'meta',name:'Motherhood Creative — Ad Set B',spend:4922,roas:2.29,ctr:0.0189,impressions:260726},
+      {ch:'meta',name:'Motherhood Creative — Ad Set A',spend:6128,roas:1.56,ctr:0.0123,impressions:280247},
+      {ch:'meta',name:'Skin Spray — Gabby Kerr UGC',spend:1350,roas:1.02,ctr:0.0289,impressions:57136},
+      {ch:'meta',name:'IWD Campaign — Static Image',spend:1347,roas:2.03,ctr:0.0058,impressions:103631},
+    ],
+    topRoasAds:[
+      {ch:'google',name:'"She\'s been running on empty, give her the gift of Nēmah"',spend:13.21,roas:79.51,revenue:1050,ctr:0.3567},
+      {ch:'google',name:'"At Nemah, we provide vegan, safe, reliable skincare for every stage of motherhood"',spend:386,roas:51.27,revenue:19800,ctr:0.2756},
+      {ch:'meta',name:'Stretch Glow Up 3sec UGC (Savannah)',spend:1.32,roas:75.06,revenue:99,ctr:0},
+      {ch:'meta',name:'Motherhood Creative — Ad Set B',spend:4922,roas:2.29,revenue:11271,ctr:0.0189},
+    ]
+  },
+  'ytd': {
+    revenue:605569, spend:184390, roas:2.48, pixelRoas:3.95, cpa:28.10, cvr:0.0534,
+    sessions:248693, orders:9038, aov:67.00,
+    metaSpend:127480, metaRoas:1.78, googleSpend:29240, googleRoas:6.18,
+    metaSess:127000, directSess:48200, googleSess:33800, influencerSess:20400, organicSess:19293,
+    videoSpend:90230, videoRoas:1.71, videoCtr:0.0148,
+    imageSpend:27100, imageRoas:1.19, imageCtr:0.0079,
+    dailyRev:[],dailyMeta:[],dailyGoogle:[],dailyDates:[],
+    topAds:[
+      {ch:'meta',name:'UGC Scar Demo — Mary 30sec',spend:6390,roas:1.18,ctr:0.0181,impressions:228900},
+      {ch:'google',name:'Google Ads Campaign — Main',spend:6220,roas:2.01,ctr:0.0052,impressions:709459},
+      {ch:'meta',name:'Motherhood Creative — Ad Set B',spend:4922,roas:2.29,ctr:0.0189,impressions:260726},
+      {ch:'meta',name:'Motherhood Creative — Ad Set A',spend:6128,roas:1.56,ctr:0.0123,impressions:280247},
+      {ch:'meta',name:'Skin Spray — Gabby Kerr UGC',spend:1350,roas:1.02,ctr:0.0289,impressions:57136},
+      {ch:'meta',name:'IWD Campaign — Static Image',spend:1347,roas:2.03,ctr:0.0058,impressions:103631},
+    ],
+    topRoasAds:[
+      {ch:'google',name:'"She\'s been running on empty, give her the gift of Nēmah"',spend:13.21,roas:79.51,revenue:1050,ctr:0.3567},
+      {ch:'google',name:'"At Nemah, we provide vegan, safe, reliable skincare for every stage of motherhood"',spend:386,roas:51.27,revenue:19800,ctr:0.2756},
+    ]
+  }
+};
+
+// Current data state
+let D = SNAP['mtd'];
+let currentPreset = 'mtd';
+
+// ── FORMATTERS ──
+const $K=n=>n==null?'—':n>=1e6?'$'+(n/1e6).toFixed(1)+'M':n>=1e3?'$'+(n/1e3).toFixed(0)+'K':'$'+Math.round(n).toLocaleString();
+const $F=n=>'$'+Math.round(n).toLocaleString();
+const pct=n=>n==null?'—':(n<1?(n*100).toFixed(1):n.toFixed(1))+'%';
+const xr=n=>n==null?'—':n.toFixed(2)+'×';
+const num=n=>n==null?'—':Math.round(n).toLocaleString();
+
+// ── TABS ──
+function showTab(id,el){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  el.classList.add('active');
+}
+
+// ── DATE PRESETS ──
+function today(){return '2026-05-05';}
+function daysAgo(n){const d=new Date('2026-05-05');d.setDate(d.getDate()-n);return d.toISOString().split('T')[0];}
+
+const PRESETS={
+  '7d': {from:daysAgo(7),to:today(),label:'Apr 28 – May 5, 2026 (Last 7D)',key:'7d'},
+  '14d':{from:daysAgo(14),to:today(),label:'Apr 21 – May 5, 2026 (Last 14D)',key:'30d'},
+  'mtd':{from:'2026-05-01',to:today(),label:'May 1 – May 5, 2026 (MTD)',key:'mtd'},
+  '30d':{from:daysAgo(30),to:today(),label:'Apr 5 – May 5, 2026 (Last 30D)',key:'30d'},
+  '90d':{from:daysAgo(90),to:today(),label:'Feb 4 – May 5, 2026 (Last 90D)',key:'ytd'},
+  'ytd':{from:'2026-01-01',to:today(),label:'Jan 1 – May 5, 2026 (YTD)',key:'ytd'}
+};
+
+function setPreset(key, el) {
+  document.querySelectorAll('.preset').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  const p=PRESETS[key];
+  document.getElementById('d-from').value=p.from;
+  document.getElementById('d-to').value=p.to;
+  document.getElementById('range-label').textContent=p.label;
+  currentPreset = p.key;
+  loadData(p.key);
+}
+
+function applyRange() {
+  const from=document.getElementById('d-from').value;
+  const to=document.getElementById('d-to').value;
+  if(!from||!to||from>to){alert('Please select a valid date range.');return;}
+  document.querySelectorAll('.preset').forEach(b=>b.classList.remove('on'));
+  const fmtD=d=>{const[y,m,day]=d.split('-');const ms=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return ms[parseInt(m)-1]+' '+parseInt(day)+', '+y;};
+  document.getElementById('range-label').textContent=`${fmtD(from)} – ${fmtD(to)} (Custom)`;
+  // For custom ranges, pick closest snapshot
+  const days=(new Date(to)-new Date(from))/(1000*60*60*24);
+  const key = days<=7?'7d':days<=35?'30d':'ytd';
+  loadData(key, from, to);
+}
+
+async function loadData(snapKey, from, to) {
+  setFetching(true);
+  // Try live API first
+  try {
+    const f=from||PRESETS[currentPreset]?.from||'2026-05-01';
+    const t=to||PRESETS[currentPreset]?.to||today();
+    const res = await fetch(`/.netlify/functions/data?from=${f}&to=${t}`);
+    if(res.ok){
+      const j=await res.json();
+      // Merge live data over snapshot
+      const snap={...SNAP[snapKey]};
+      if(j.triplewhale){
+        const tw=j.triplewhale;
+        if(tw.total_ad_spend) snap.spend=tw.total_ad_spend;
+        if(tw.blended_roas)   snap.roas=tw.blended_roas;
+        if(tw.cpa)            snap.cpa=tw.cpa;
+        if(tw.meta_spend)     snap.metaSpend=tw.meta_spend;
+        if(tw.meta_roas)      snap.metaRoas=tw.meta_roas;
+        if(tw.google_spend)   snap.googleSpend=tw.google_spend;
+        if(tw.google_roas)    snap.googleRoas=tw.google_roas;
+        if(tw.top_ads)        snap.topAds=tw.top_ads;
+      }
+      if(j.shopify){
+        const sh=j.shopify;
+        if(sh.totalRevenue) snap.revenue=sh.totalRevenue;
+        if(sh.totalOrders)  snap.orders=sh.totalOrders;
+        if(sh.totalSessions)snap.sessions=sh.totalSessions;
+        if(sh.aov)          snap.aov=sh.aov;
+        if(sh.dailyRev)     snap.dailyRev=sh.dailyRev;
+      }
+      D=snap;
+    } else { D=SNAP[snapKey]||SNAP['mtd']; }
+  } catch(e) {
+    D=SNAP[snapKey]||SNAP['mtd'];
+  }
+  setFetching(false);
+  document.getElementById('hdr-ts').textContent='Updated '+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  renderAll();
+}
+
+// ── RENDER ALL ──
+function renderAll(){
+  renderOverview();renderCreative();renderAcquisition();renderConversion();renderSpend();
+  // Header
+  document.getElementById('hdr-roas').textContent=xr(D.roas);
+  document.getElementById('hdr-spend').textContent=$K(D.spend);
+  document.getElementById('hdr-cpa').textContent='$'+D.cpa.toFixed(2);
+  document.getElementById('hdr-cvr').textContent=pct(D.cvr);
+}
+
+function renderOverview(){
+  document.getElementById('ov-rev').textContent=$K(D.revenue);
+  document.getElementById('ov-rev-sub').textContent=document.getElementById('range-label').textContent;
+  document.getElementById('ov-spend').textContent=$K(D.spend);
+  document.getElementById('ov-roas').textContent=xr(D.roas);
+  document.getElementById('ov-roas-sub').textContent='Pixel ROAS: '+xr(D.pixelRoas);
+  document.getElementById('ov-cpa').textContent='$'+D.cpa.toFixed(2);
+  document.getElementById('ov-orders').textContent=num(D.orders)+' orders';
+  document.getElementById('ov-cvr').textContent=pct(D.cvr);
+  document.getElementById('ov-sess').textContent=num(D.sessions)+' sessions';
+
+  dc('ov-rev');
+  if(D.dailyRev&&D.dailyRev.length>0){
+    const totalSpend=D.dailyMeta.map((m,i)=>m+(D.dailyGoogle[i]||0));
+    charts['ov-rev']=new Chart(document.getElementById('ov-rev-chart'),{
+      type:'line',data:{labels:D.dailyDates,datasets:[
+        {label:'Revenue',data:D.dailyRev,borderColor:'#2c2118',backgroundColor:'rgba(44,33,24,.05)',fill:true,tension:.3,borderWidth:1.5,pointRadius:0},
+        {label:'Ad Spend',data:totalSpend,borderColor:'#9e3a2a',fill:false,tension:.3,borderWidth:1,borderDash:[4,2],pointRadius:0}
+      ]},
+      options:{...base(),plugins:{...base().plugins,legend:{display:true,labels:{color:'#9c8e80',boxWidth:10,font:{size:9}}}}}
+    });
+  }
+
+  dc('ov-traffic');
+  const totSess=(D.metaSess||0)+(D.directSess||0)+(D.googleSess||0)+(D.influencerSess||0)+(D.organicSess||0);
+  charts['ov-traffic']=new Chart(document.getElementById('ov-traffic-chart'),{
+    type:'doughnut',
+    data:{labels:['Meta','Direct','Google','Influencers','Organic'],datasets:[{data:[D.metaSess,D.directSess,D.googleSess,D.influencerSess,D.organicSess],backgroundColor:['#1877f2','#c47b1a','#ea4335','#8b5cf6','#6b8f5e'],borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:true,position:'right',labels:{color:'#9c8e80',boxWidth:9,font:{size:9}}},tooltip:{backgroundColor:'#2c2118',bodyColor:'#faf8f4',callbacks:{label:c=>' '+c.label+': '+c.raw.toLocaleString()}}}}
+  });
+
+  // Signals
+  const sigs=[];
+  if(D.googleRoas>D.metaRoas*2)sigs.push({cls:'ag',icon:'↑',t:`Google ROAS ${xr(D.googleRoas)} — ${(D.googleRoas/D.metaRoas).toFixed(1)}× more efficient than Meta`,b:`Only ${$K(D.googleSpend)} (${(D.googleSpend/D.spend*100).toFixed(0)}% of budget) on your highest-performing channel. Scaling to $20K at current ROAS projects $${(20000*D.googleRoas/1000).toFixed(0)}K attributed revenue.`});
+  if(D.metaRoas<2)sigs.push({cls:'ar',icon:'↓',t:`Meta ROAS ${xr(D.metaRoas)} — below 2× efficiency threshold`,b:`${$K(D.metaSpend)} (${(D.metaSpend/D.spend*100).toFixed(0)}% of budget) returning ${xr(D.metaRoas)} ROAS. Review creative mix and audience targeting.`});
+  if(D.cvr>0.04)sigs.push({cls:'ag',icon:'↑',t:`CVR ${pct(D.cvr)} — ${(D.cvr/0.03).toFixed(1)}× the industry benchmark`,b:`Strong on-site conversion. Focus on top-of-funnel traffic growth to unlock revenue upside.`});
+  if(D.videoRoas>D.imageRoas)sigs.push({cls:'ay',icon:'→',t:`Video ROAS ${xr(D.videoRoas)} outperforms Image ${xr(D.imageRoas)} — invest in video pipeline`,b:`Video: ${xr(D.videoRoas)} ROAS, ${pct(D.videoCtr)} CTR. Image: ${xr(D.imageRoas)} ROAS, ${pct(D.imageCtr)} CTR.`});
+  document.getElementById('ov-signals').innerHTML=sigs.map(s=>`<div class="alert ${s.cls}"><div class="a-icon">${s.icon}</div><div class="a-text"><div class="a-title">${s.t}</div>${s.b}</div></div>`).join('');
+}
+
+function renderCreative(){
+  document.getElementById('cr-vid-spend').textContent=$K(D.videoSpend);
+  document.getElementById('cr-vid-roas').textContent=xr(D.videoRoas);
+  document.getElementById('cr-vid-roas').style.color=D.videoRoas>=2?'var(--green)':D.videoRoas>=1.5?'var(--yellow)':'var(--red)';
+  document.getElementById('cr-vid-ctr').textContent=pct(D.videoCtr);
+  document.getElementById('cr-vid-pill').className='spill '+(D.videoRoas>=2?'spill-g':D.videoRoas>=1.5?'spill-y':'spill-r');
+  document.getElementById('cr-vid-pill').textContent=D.videoRoas>=2?'Winning':'Monitor';
+  document.getElementById('cr-img-spend').textContent=$K(D.imageSpend);
+  document.getElementById('cr-img-roas').textContent=xr(D.imageRoas);
+  document.getElementById('cr-img-roas').style.color=D.imageRoas>=2?'var(--green)':D.imageRoas>=1.2?'var(--yellow)':'var(--red)';
+  document.getElementById('cr-img-ctr').textContent=pct(D.imageCtr);
+  document.getElementById('cr-img-pill').className='spill '+(D.imageRoas>=2?'spill-g':D.imageRoas>=1.2?'spill-y':'spill-r');
+  document.getElementById('cr-img-pill').textContent=D.imageRoas>=1.5?'On Track':'Underperforming';
+
+  dc('cr-roas');dc('cr-ctr');
+  charts['cr-roas']=new Chart(document.getElementById('cr-roas-chart'),{type:'bar',data:{labels:['Video','Image'],datasets:[{data:[D.videoRoas,D.imageRoas],backgroundColor:['rgba(90,122,82,.7)','rgba(168,124,42,.7)'],borderRadius:0}]},options:{...base(),scales:{x:{grid:{display:false}},y:{grid:{color:'#ede7db'},ticks:{callback:v=>v+'×'},min:0}}}});
+  charts['cr-ctr']=new Chart(document.getElementById('cr-ctr-chart'),{type:'bar',data:{labels:['Video','Image'],datasets:[{data:[(D.videoCtr*100).toFixed(2),(D.imageCtr*100).toFixed(2)],backgroundColor:['rgba(90,122,82,.7)','rgba(168,124,42,.7)'],borderRadius:0}]},options:{...base(),scales:{x:{grid:{display:false}},y:{grid:{color:'#ede7db'},ticks:{callback:v=>v+'%'},min:0}}}});
+
+  const GRADS=['linear-gradient(150deg,#2c2118 0%,#5c4033 100%)','linear-gradient(150deg,#1a3a6b 0%,#2d6bcf 100%)','linear-gradient(150deg,#2d1b4e 0%,#6d28d9 100%)','linear-gradient(150deg,#1b3a2d 0%,#16a34a 100%)','linear-gradient(150deg,#4c1d1d 0%,#b91c1c 100%)','linear-gradient(150deg,#1c1a16 0%,#78716c 100%)'];
+  const EMOJIS=['✨','🔍','🌸','🌿','💧','🌺'];
+  const TCLRS=['#c8b89a','#c8d8f0','#ddd6fe','#bbf7d0','#fecaca','#e7e5e4'];
+  const getFlag=r=>r>=2.5?{cls:'f-scale',t:'↑ Scale — strong ROAS'}:r>=1.8?{cls:'f-scale',t:'↑ Scale carefully'}:r>=1.2?{cls:'f-watch',t:'→ Monitor performance'}:r>=0.9?{cls:'f-watch',t:'→ Near breakeven'}:{cls:'f-pause',t:'⚠ Optimise or rotate'};
+  const trunc=(s,n=50)=>s.length>n?s.slice(0,n)+'…':s;
+
+  document.getElementById('creative-cards').innerHTML=(D.topAds||[]).map((ad,i)=>{
+    const flag=getFlag(ad.roas);
+    const rc=ad.roas>=2?'var(--green)':ad.roas>=1.2?'var(--yellow)':'var(--red)';
+    const badgeCls=ad.ch==='google'?'b-google':ad.roas?'b-video':'b-image';
+    const badgeTxt=ad.ch==='google'?'Google · Search':ad.ctr>0.015?'Meta · Video':'Meta · Image';
+    return`<div class="ccard">
+      <div class="cthumb" style="background:${GRADS[i%GRADS.length]}">
+        <span class="cbadge ${badgeCls}">${badgeTxt}</span>
+        <div class="crank">#${i+1}</div>
+        <div class="cvisual" style="color:${TCLRS[i%TCLRS.length]}"><div><div style="font-size:26px;margin-bottom:10px">${EMOJIS[i%EMOJIS.length]}</div><div>${trunc(ad.name,55)}</div></div></div>
+      </div>
+      <div class="cmeta">
+        <div class="cname">${trunc(ad.name,48)}</div>
+        <div class="chook">${ad.ch==='google'?'Google Search':'Meta '+badgeTxt.split('·')[1]?.trim()} · ${num(ad.impressions)} impressions</div>
+        <div class="cstats">
+          <div class="cs"><div class="cs-lbl">Spend</div><div class="cs-val">${$K(ad.spend)}</div></div>
+          <div class="cs"><div class="cs-lbl">ROAS</div><div class="cs-val" style="color:${rc}">${xr(ad.roas)}</div></div>
+          <div class="cs"><div class="cs-lbl">CTR</div><div class="cs-val">${ad.ctr?pct(ad.ctr):'—'}</div></div>
+        </div>
+      </div>
+      <div class="cflag ${flag.cls}">${flag.t}</div>
+    </div>`;
+  }).join('');
+
+  // Headlines table
+  document.getElementById('cr-headlines').innerHTML=(D.topRoasAds||[]).map(ad=>{
+    const rc=ad.roas>=10?'var(--green)':ad.roas>=2?'var(--yellow)':'var(--red)';
+    const sig=ad.roas>=10?'spill-g':ad.roas>=2?'spill-y':'spill-r';
+    const sigTxt=ad.roas>=10?'Scale':ad.roas>=2?'Monitor':'Optimise';
+    return`<tr><td style="max-width:260px;font-style:italic">${trunc(ad.name,70)}</td>
+    <td style="color:${ad.ch==='google'?'var(--google)':'var(--meta)'}">${ad.ch==='google'?'Google':'Meta'}</td>
+    <td>${$K(ad.spend)}</td><td>${$K(ad.revenue)}</td>
+    <td style="color:${rc};font-weight:400">${xr(ad.roas)}</td>
+    <td>${ad.ctr?pct(ad.ctr):'—'}</td>
+    <td><span class="spill ${sig}">${sigTxt}</span></td></tr>`;
+  }).join('');
+
+  // Recs
+  const recs=[];
+  const bestMeta=(D.topAds||[]).filter(a=>a.ch==='facebook-ads'||a.ch==='meta').sort((a,b)=>b.roas-a.roas)[0];
+  const worstMeta=(D.topAds||[]).filter(a=>(a.ch==='facebook-ads'||a.ch==='meta')&&a.spend>500).sort((a,b)=>a.roas-b.roas)[0];
+  if(bestMeta)recs.push({cls:'ag',icon:'🏆',t:`Scale "${trunc(bestMeta.name,45)}" — best Meta ROAS at ${xr(bestMeta.roas)}`,b:`Expand lookalike audiences from its converters. Test similar angles and hooks with fresh creative variants.`});
+  if(D.videoRoas>D.imageRoas)recs.push({cls:'ag',icon:'🎬',t:`Video outperforms image by ${((D.videoRoas/D.imageRoas-1)*100).toFixed(0)}% ROAS — invest in video`,b:`Video: ${xr(D.videoRoas)} ROAS, ${pct(D.videoCtr)} CTR. Image: ${xr(D.imageRoas)} ROAS, ${pct(D.imageCtr)} CTR. Prioritise short-form UGC video for new tests.`});
+  const topRoas=(D.topRoasAds||[])[0];
+  if(topRoas)recs.push({cls:'ai',icon:'📝',t:`Adapt "${trunc(topRoas.name,45)}" to Meta`,b:`This message generates ${xr(topRoas.roas)} ROAS. Test as a video hook and primary text in Meta campaigns — emotional gifting angle resonates strongly.`});
+  if(worstMeta&&worstMeta.roas<1.3)recs.push({cls:'ar',icon:'⛔',t:`Rotate "${trunc(worstMeta.name,40)}" — ${$K(worstMeta.spend)} at ${xr(worstMeta.roas)} ROAS`,b:`Produce a fresh variant with a new hook before pausing. Creative fatigue likely.`});
+  document.getElementById('cr-recs').innerHTML=recs.map(r=>`<div class="alert ${r.cls}"><div class="a-icon">${r.icon}</div><div class="a-text"><div class="a-title">${r.t}</div>${r.b}</div></div>`).join('');
+}
+
+function renderAcquisition(){
+  const total=(D.metaSess||0)+(D.directSess||0)+(D.googleSess||0)+(D.influencerSess||0)+(D.organicSess||0);
+  const paid=(D.metaSess||0)+(D.googleSess||0);
+  document.getElementById('acq-sess').textContent=num(total);
+  document.getElementById('acq-paid').textContent=num(paid);
+  document.getElementById('acq-organic').textContent=num(total-paid);
+  document.getElementById('acq-orders').textContent=num(D.orders);
+  const maxS=Math.max(D.metaSess,D.directSess,D.googleSess,D.influencerSess,D.organicSess);
+  document.getElementById('acq-ch-rows').innerHTML=[
+    {name:'Meta / Facebook',s:D.metaSess,c:'#1877f2'},
+    {name:'Direct',s:D.directSess,c:'#c47b1a'},
+    {name:'Google Ads',s:D.googleSess,c:'#ea4335'},
+    {name:'Influencers',s:D.influencerSess,c:'#8b5cf6'},
+    {name:'Organic/Social',s:D.organicSess,c:'#6b8f5e'}
+  ].map(ch=>`<div class="ch-row"><div class="ch-dot" style="background:${ch.c}"></div><div class="ch-name">${ch.name}</div><div class="ch-track"><div class="ch-fill" style="background:${ch.c};width:${total?Math.round(ch.s/maxS*100):0}%"></div></div><div class="ch-val">${num(ch.s)}</div><div class="ch-pct">${total?(ch.s/total*100).toFixed(0):'0'}%</div></div>`).join('');
+
+  dc('acq-roas');
+  charts['acq-roas']=new Chart(document.getElementById('acq-roas'),{type:'bar',data:{labels:['Meta','Google','Blended'],datasets:[{data:[D.metaRoas,D.googleRoas,D.roas],backgroundColor:['rgba(24,119,242,.6)','rgba(234,67,53,.6)','rgba(44,33,24,.35)'],borderRadius:0}]},options:{...base(),indexAxis:'y',scales:{x:{grid:{color:'#ede7db'},ticks:{callback:v=>v+'×'}},y:{grid:{display:false}}}}});
+}
+
+function renderConversion(){
+  document.getElementById('cv-cvr').textContent=pct(D.cvr);
+  document.getElementById('cv-aov').textContent='$'+D.aov.toFixed(2);
+  document.getElementById('cv-rps').textContent='$'+(D.aov*D.cvr).toFixed(2);
+  document.getElementById('cv-orders').textContent=num(D.orders);
+  const labels=D.dailyDates.length>0?D.dailyDates:['—'];
+  const dailyOrd=D.dailyRev.map(r=>Math.round(r/D.aov));
+  dc('cv');
+  if(D.dailyRev.length>0){
+    charts['cv']=new Chart(document.getElementById('cv-chart'),{type:'line',data:{labels,datasets:[
+      {label:'Revenue',data:D.dailyRev,borderColor:'#2c2118',fill:false,tension:.3,borderWidth:1.5,pointRadius:0,yAxisID:'y'},
+      {label:'Orders',data:dailyOrd,borderColor:'#6b8f5e',fill:false,tension:.3,borderWidth:1.5,borderDash:[4,2],pointRadius:0,yAxisID:'y1'}
+    ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,labels:{color:'#9c8e80',boxWidth:10,font:{size:9}}},tooltip:{backgroundColor:'#2c2118',bodyColor:'#faf8f4'}},scales:{x:{grid:{color:'#ede7db'},ticks:{maxTicksLimit:10}},y:{grid:{color:'#ede7db'},ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'k'}},y1:{position:'right',grid:{display:false},ticks:{color:'#6b8f5e'}}}}});
+  }
+  const aov=D.aov,ords=D.orders;
+  dc('cv-aov');
+  charts['cv-aov']=new Chart(document.getElementById('cv-aov-chart'),{type:'bar',data:{labels:['Current','+5%','+10%','+15%','+20%'],datasets:[{data:[ords*aov,ords*aov*1.05,ords*aov*1.10,ords*aov*1.15,ords*aov*1.20].map(Math.round),backgroundColor:['rgba(44,33,24,.25)','rgba(90,122,82,.3)','rgba(90,122,82,.5)','rgba(90,122,82,.7)','rgba(90,122,82,.9)'],borderRadius:0}]},options:{...base(),scales:{x:{grid:{display:false}},y:{grid:{color:'#ede7db'},ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'k'}}}}});
+}
+
+function renderSpend(){
+  document.getElementById('sp-total').textContent=$K(D.spend);
+  document.getElementById('sp-meta').textContent=$K(D.metaSpend);
+  document.getElementById('sp-meta-sub').textContent=D.spend?(D.metaSpend/D.spend*100).toFixed(1)+'% of budget · ROAS '+xr(D.metaRoas):'—';
+  document.getElementById('sp-google').textContent=$K(D.googleSpend);
+  document.getElementById('sp-google-sub').textContent=D.spend?(D.googleSpend/D.spend*100).toFixed(1)+'% of budget · ROAS '+xr(D.googleRoas):'—';
+  document.getElementById('sp-cpa').textContent='$'+D.cpa.toFixed(2);
+
+  dc('sp-daily');dc('sp-roas');
+  if(D.dailyMeta&&D.dailyMeta.length>0){
+    charts['sp-daily']=new Chart(document.getElementById('sp-daily'),{type:'bar',data:{labels:D.dailyDates,datasets:[{label:'Meta',data:D.dailyMeta,backgroundColor:'rgba(24,119,242,.6)',stack:'s'},{label:'Google',data:D.dailyGoogle,backgroundColor:'rgba(234,67,53,.6)',stack:'s'}]},options:{...base(),plugins:{...base().plugins,legend:{display:true,labels:{color:'#9c8e80',boxWidth:10,font:{size:9}}}},scales:{x:{stacked:true,grid:{color:'#ede7db'},ticks:{maxTicksLimit:10}},y:{stacked:true,grid:{color:'#ede7db'},ticks:{callback:v=>'$'+v}}}}});
+  }
+  charts['sp-roas']=new Chart(document.getElementById('sp-roas'),{type:'bar',data:{labels:['Meta','Google','Blended'],datasets:[{data:[D.metaRoas,D.googleRoas,D.roas],backgroundColor:['rgba(24,119,242,.6)','rgba(234,67,53,.6)','rgba(44,33,24,.35)'],borderRadius:0}]},options:{...base(),scales:{x:{grid:{display:false}},y:{grid:{color:'#ede7db'},ticks:{callback:v=>v+'×'},min:0}}}});
+
+  const sigs=[];
+  if(D.metaRoas<2)sigs.push({cls:'ar',icon:'⚠',t:`Meta ROAS ${xr(D.metaRoas)} — below 2× efficiency threshold`,b:`At typical COGS (~45%) for health & beauty, 2.2× ROAS is breakeven. Current Meta at ${xr(D.metaRoas)} may be spending into negative margin.`});
+  if(D.googleRoas>4)sigs.push({cls:'ag',icon:'↑',t:`Google at ${xr(D.googleRoas)} — aggressively under-invested`,b:`Only ${$K(D.googleSpend)} (${(D.googleSpend/D.spend*100).toFixed(0)}% of budget). Scaling to $20K projects $${(20000*D.googleRoas/1000).toFixed(0)}K attributed revenue.`});
+  document.getElementById('sp-signals').innerHTML=sigs.map(s=>`<div class="alert ${s.cls}"><div class="a-icon">${s.icon}</div><div class="a-text"><div class="a-title">${s.t}</div>${s.b}</div></div>`).join('');
+}
+
+function setFetching(on){
+  document.getElementById('fetch-ring').classList.toggle('on',on);
+  document.getElementById('apply-btn').disabled=on;
+}
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded',()=>{
+  renderAll();
+  loadData('mtd');
+  setInterval(()=>loadData(currentPreset),5*60*1000);
+});
+</script>
+</body>
+</html>
