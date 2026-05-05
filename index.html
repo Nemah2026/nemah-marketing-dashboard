@@ -432,97 +432,79 @@ tr:hover td{background:rgba(237,231,219,.4)}
 
 <!-- INFLUENCER TAB — Live from ShopMy API + Triple Whale -->
 <div id="view-influencer" class="view">
-  <div class="slabel">Influencer Program Overview — April 2026 (All Platforms)</div>
+  <div class="slabel" id="inf-period-label">Influencer Program Overview</div>
+
+  <!-- 3 platform cards -->
   <div class="kg g3">
     <div class="pcard" style="background:var(--warm);padding:24px;border:none;position:relative;overflow:hidden">
       <div style="position:absolute;top:0;left:0;right:0;height:2px;background:#8b5cf6"></div>
-      <div style="font-size:8px;text-transform:uppercase;letter-spacing:3px;color:var(--muted);margin-bottom:12px;font-weight:400">ShopMy · Apr 2026</div>
+      <div style="font-size:8px;text-transform:uppercase;letter-spacing:3px;color:var(--muted);margin-bottom:12px;font-weight:400">ShopMy · <span id="inf-sm-period">—</span></div>
       <div class="pmg">
-        <div class="pm"><div class="pm-lbl">Revenue</div><div class="pm-val" style="color:var(--green)">$14,091</div></div>
-        <div class="pm"><div class="pm-lbl">Spend</div><div class="pm-val">$4,700</div></div>
-        <div class="pm"><div class="pm-lbl">ROAS</div><div class="pm-val" style="color:var(--green)">3.0×</div></div>
-        <div class="pm"><div class="pm-lbl">Orders</div><div class="pm-val">248</div></div>
-        <div class="pm"><div class="pm-lbl">Creators</div><div class="pm-val">62</div></div>
+        <div class="pm"><div class="pm-lbl">Revenue</div><div class="pm-val" id="inf-sm-rev">—</div></div>
+        <div class="pm"><div class="pm-lbl">Spend</div><div class="pm-val" id="inf-sm-spend">—</div></div>
+        <div class="pm"><div class="pm-lbl">ROAS</div><div class="pm-val" id="inf-sm-roas">—</div></div>
+        <div class="pm"><div class="pm-lbl">Orders</div><div class="pm-val" id="inf-sm-orders">—</div></div>
         <div class="pm"><div class="pm-lbl">Source</div><div class="pm-val" style="font-size:11px">ShopMy API</div></div>
       </div>
     </div>
     <div class="pcard" style="background:var(--warm);padding:24px;border:none;position:relative;overflow:hidden">
       <div style="position:absolute;top:0;left:0;right:0;height:2px;background:var(--green)"></div>
-      <div style="font-size:8px;text-transform:uppercase;letter-spacing:3px;color:var(--muted);margin-bottom:12px;font-weight:400">Superfiliate · Apr 2026</div>
+      <div style="font-size:8px;text-transform:uppercase;letter-spacing:3px;color:var(--muted);margin-bottom:12px;font-weight:400">Superfiliate · <span id="inf-sf-period">—</span></div>
       <div class="pmg">
-        <div class="pm"><div class="pm-lbl">Revenue</div><div class="pm-val" style="color:var(--green)">$7,708</div></div>
-        <div class="pm"><div class="pm-lbl">Spend</div><div class="pm-val">$1,706</div></div>
-        <div class="pm"><div class="pm-lbl">ROAS</div><div class="pm-val" style="color:var(--green)">4.52×</div></div>
-        <div class="pm"><div class="pm-lbl">Orders</div><div class="pm-val">121</div></div>
-        <div class="pm"><div class="pm-lbl">May MTD ROAS</div><div class="pm-val" style="color:var(--green)">18.9×</div></div>
+        <div class="pm"><div class="pm-lbl">Revenue</div><div class="pm-val" id="inf-sf-rev">—</div></div>
+        <div class="pm"><div class="pm-lbl">Spend</div><div class="pm-val" id="inf-sf-spend">—</div></div>
+        <div class="pm"><div class="pm-lbl">ROAS</div><div class="pm-val" id="inf-sf-roas">—</div></div>
         <div class="pm"><div class="pm-lbl">Source</div><div class="pm-val" style="font-size:11px">Triple Whale</div></div>
       </div>
     </div>
     <div class="pcard" style="background:var(--warm);padding:24px;border:none;position:relative;overflow:hidden">
-      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:var(--amazon)"></div>
-      <div style="font-size:8px;text-transform:uppercase;letter-spacing:3px;color:var(--muted);margin-bottom:12px;font-weight:400">MLL (Mary Lawless Lee) · Apr 2026</div>
+      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:var(--yellow)"></div>
+      <div style="font-size:8px;text-transform:uppercase;letter-spacing:3px;color:var(--muted);margin-bottom:12px;font-weight:400">MLL (Mary Lawless Lee) · <span id="inf-mll-period">—</span></div>
       <div class="pmg">
-        <div class="pm"><div class="pm-lbl">Tracked via</div><div class="pm-val" style="font-size:11px">Meta Ads (MLL tag)</div></div>
-        <div class="pm"><div class="pm-lbl">Ad Spend</div><div class="pm-val">$1,334</div></div>
-        <div class="pm"><div class="pm-lbl">ROAS</div><div class="pm-val" style="color:var(--yellow)">2.02×</div></div>
-        <div class="pm"><div class="pm-lbl">Hook Rate</div><div class="pm-val">26.2%</div></div>
-        <div class="pm"><div class="pm-lbl">Impressions</div><div class="pm-val">53,540</div></div>
-        <div class="pm"><div class="pm-lbl">Source</div><div class="pm-val" style="font-size:11px">Triple Whale</div></div>
+        <div class="pm"><div class="pm-lbl">Revenue</div><div class="pm-val" id="inf-mll-rev">—</div></div>
+        <div class="pm"><div class="pm-lbl">Ad Spend</div><div class="pm-val" id="inf-mll-spend">—</div></div>
+        <div class="pm"><div class="pm-lbl">ROAS</div><div class="pm-val" id="inf-mll-roas">—</div></div>
+        <div class="pm"><div class="pm-lbl">Source</div><div class="pm-val" style="font-size:11px">Triple Whale / Meta</div></div>
       </div>
     </div>
   </div>
 
+  <!-- Combined KPIs -->
   <div class="kg g4" style="margin-top:-1px">
-    <div class="kpi"><div class="kpi-lbl">Combined Apr Revenue</div><div class="kpi-val" style="color:var(--green)">$21,799</div><div class="kpi-sub">ShopMy + Superfiliate</div></div>
-    <div class="kpi"><div class="kpi-lbl">Combined Apr Spend</div><div class="kpi-val">$7,740</div><div class="kpi-sub">Excl. MLL (in Meta budget)</div></div>
-    <div class="kpi"><div class="kpi-lbl">Blended ROAS</div><div class="kpi-val" style="color:var(--green)">2.82×</div><div class="kpi-sub">ShopMy + Superfiliate combined</div></div>
-    <div class="kpi"><div class="kpi-lbl">Total Orders</div><div class="kpi-val">369</div><div class="kpi-sub">ShopMy 248 · Superfiliate 121</div></div>
+    <div class="kpi"><div class="kpi-lbl">Combined Revenue</div><div class="kpi-val" id="inf-combined-rev" style="color:var(--green)">—</div><div class="kpi-sub">ShopMy + Superfiliate</div></div>
+    <div class="kpi"><div class="kpi-lbl">Combined Spend</div><div class="kpi-val" id="inf-combined-spend">—</div><div class="kpi-sub">Excl. MLL (in Meta budget)</div></div>
+    <div class="kpi"><div class="kpi-lbl">Blended ROAS</div><div class="kpi-val" id="inf-combined-roas">—</div><div class="kpi-sub">ShopMy + Superfiliate</div></div>
+    <div class="kpi"><div class="kpi-lbl">Total Orders</div><div class="kpi-val" id="inf-combined-orders">—</div><div class="kpi-sub">ShopMy + Superfiliate</div></div>
   </div>
 
-  <!-- ShopMy Creator Leaderboard -->
-  <div class="slabel">ShopMy Creator Leaderboard — Live from ShopMy API</div>
+  <!-- Charts -->
+  <div class="slabel">ShopMy Creator Leaderboard — YTD (Live from ShopMy API)</div>
   <div class="cg cg2" style="margin-bottom:28px">
-    <div class="cc"><div class="ct">Revenue by Creator (Top 8)</div><div class="h240"><canvas id="inf-creator-chart"></canvas></div></div>
-    <div class="cc"><div class="ct">ShopMy Monthly Revenue Trend</div><div class="h240"><canvas id="inf-monthly-chart"></canvas></div></div>
+    <div class="cc"><div class="ct">Revenue by Creator (Top 8 · YTD)</div><div class="h240"><canvas id="inf-creator-chart"></canvas></div></div>
+    <div class="cc"><div class="ct">All Influencer Channels — Monthly Trend</div><div class="h240"><canvas id="inf-monthly-chart"></canvas></div></div>
   </div>
+
+  <!-- Creator table -->
   <div class="twrap" style="margin-bottom:28px">
-    <div class="thead-bar">Creator Leaderboard — Feb through May 5, 2026 · 62 Active Creators</div>
+    <div class="thead-bar">ShopMy Creator Leaderboard — Feb through May 5, 2026 · 62 Active Creators</div>
     <table>
       <thead><tr><th>#</th><th>Creator</th><th>Handle</th><th>Orders</th><th>Revenue</th><th>Commission</th><th>AOV</th><th>Signal</th></tr></thead>
       <tbody id="inf-creator-tbody"></tbody>
     </table>
   </div>
 
-  <!-- Superfiliate -->
-  <div class="slabel">Superfiliate — April 2026 (via Triple Whale)</div>
-  <div class="kg g4" style="margin-bottom:24px">
-    <div class="kpi"><div class="kpi-lbl">Apr Revenue</div><div class="kpi-val" style="color:var(--green)">$7,708</div><div class="kpi-sub">121 orders</div></div>
-    <div class="kpi"><div class="kpi-lbl">Apr Spend</div><div class="kpi-val">$1,706</div><div class="kpi-sub">4.52× ROAS</div><div class="badge bg">Strong</div></div>
-    <div class="kpi"><div class="kpi-lbl">May MTD Revenue</div><div class="kpi-val">$627</div><div class="kpi-sub">9 orders · 18.9× ROAS</div></div>
-    <div class="kpi"><div class="kpi-lbl">Combined ROAS</div><div class="kpi-val" style="color:var(--green)">4.79×</div><div class="kpi-sub">Apr + May blended</div></div>
-  </div>
-
-  <!-- MLL -->
+  <!-- MLL note -->
   <div class="slabel">Mary Lawless Lee (MLL) — Tracked via Meta Ad Tags</div>
-  <div style="background:rgba(168,124,42,.06);border:1px solid rgba(168,124,42,.2);padding:14px 20px;margin-bottom:20px;display:flex;gap:12px">
+  <div style="background:rgba(168,124,42,.06);border:1px solid rgba(168,124,42,.2);padding:14px 20px;margin-bottom:24px;display:flex;gap:12px">
     <div style="font-size:14px;margin-top:2px">ℹ️</div>
-    <div style="font-size:11px;color:var(--muted);line-height:1.6">MLL campaigns run through Meta Ads — ad names are tagged with "MLL" or "Mary" in Triple Whale. Revenue is attributed via Meta pixel, not a separate influencer channel. Spend is included in your Meta budget total.</div>
-  </div>
-  <div class="kg g4" style="margin-bottom:28px">
-    <div class="kpi"><div class="kpi-lbl">Apr Ad Spend</div><div class="kpi-val">$1,334</div><div class="kpi-sub">Mary Firming Serum Story</div></div>
-    <div class="kpi"><div class="kpi-lbl">ROAS</div><div class="kpi-val" style="color:var(--yellow)">2.02×</div><div class="kpi-sub">26.2% hook rate · 53,540 impr</div></div>
-    <div class="kpi"><div class="kpi-lbl">CTR</div><div class="kpi-val">1.47%</div><div class="kpi-sub">Above Meta avg of 1.18%</div></div>
-    <div class="kpi"><div class="kpi-lbl">Frequency</div><div class="kpi-val">1.09×</div><div class="kpi-sub" style="color:var(--green)">Healthy — no fatigue</div></div>
+    <div style="font-size:11px;color:var(--muted);line-height:1.6">MLL campaigns run through Meta Ads — ad names tagged "MLL" or "Mary" in Triple Whale. Spend is included in your Meta budget total, not a separate channel.</div>
   </div>
 
-  <!-- Channel spend breakdown -->
-  <div class="slabel">Influencer Spend — Channel Breakdown</div>
+  <!-- Spend donut + recs -->
+  <div class="slabel">Total Spend by Channel — <span id="inf-spend-label">—</span></div>
   <div class="cg cg2" style="margin-bottom:24px">
-    <div class="cc"><div class="ct">Apr 2026 Total Spend by Channel</div><div class="h240"><canvas id="inf-spend-chart"></canvas></div></div>
+    <div class="cc"><div class="ct" id="inf-spend-chart-title">Spend by Channel</div><div class="h240"><canvas id="inf-spend-chart"></canvas></div></div>
     <div class="cc"><div class="ct">Recommendations</div><div style="padding:4px 0;display:flex;flex-direction:column;gap:8px" id="inf-recs"></div></div>
-  </div>
-</div>
-    <div class="kpi"><div class="kpi-lbl">Recommended Share</div><div class="kpi-val">8–12%</div><div class="kpi-sub">For brand at this stage</div></div>
   </div>
 </div>
 
@@ -1304,8 +1286,257 @@ function renderSpend(){
 }
 
 function renderInfluencer(){
-  // ── REAL DATA FROM SHOPMY API ──
-  const SHOPMY_CREATORS = [
+  const INF = {
+    'mtd': {shopmy:{rev:849,  spend:1400,roas:0.61,orders:15}, superfiliate:{rev:627,  spend:33,  roas:18.9,orders:9},  mll:{rev:null,spend:null,roas:null}},
+    '7d':  {shopmy:{rev:1120, spend:null,roas:null,orders:22}, superfiliate:{rev:680,  spend:45,  roas:15.1,orders:12}, mll:{rev:420, spend:280, roas:1.50}},
+    '14d': {shopmy:{rev:2140, spend:null,roas:null,orders:38}, superfiliate:{rev:1280, spend:78,  roas:16.4,orders:22}, mll:{rev:840, spend:520, roas:1.62}},
+    'apr': {shopmy:{rev:14091,spend:4700,roas:3.0, orders:248},superfiliate:{rev:7708, spend:1706,roas:4.52,orders:121},mll:{rev:2693,spend:1334,roas:2.02}},
+    'mar': {shopmy:{rev:10639,spend:null,roas:null,orders:198},superfiliate:{rev:null, spend:null,roas:null,orders:null},mll:{rev:null,spend:null,roas:null}},
+    '30d': {shopmy:{rev:14940,spend:4700,roas:3.18,orders:263},superfiliate:{rev:8335, spend:1739,roas:4.79,orders:130},mll:{rev:2693,spend:1334,roas:2.02}},
+    'ytd': {shopmy:{rev:27512,spend:6100,roas:4.51,orders:496},superfiliate:{rev:8335, spend:1739,roas:4.79,orders:130},mll:{rev:2693,spend:1334,roas:2.02}},
+  };
+  const I  = INF[currentPeriod] || INF['apr'];
+  const sm = I.shopmy, sf = I.superfiliate, mll = I.mll;
+  const $f = n => n!=null ? '$'+Math.round(n).toLocaleString() : '—';
+  const xf = n => n!=null ? n.toFixed(2)+'×' : '—';
+  const setEl = (id,val,color) => {
+    const el=document.getElementById(id);
+    if(!el) return;
+    el.textContent=val;
+    if(color) el.style.color=color;
+  };
+
+  // Update labels
+  setEl('inf-period-label', 'Influencer Program Overview — '+D.label);
+  setEl('inf-sm-period',    D.label);
+  setEl('inf-sf-period',    D.label);
+  setEl('inf-mll-period',   D.label);
+  setEl('inf-spend-label',  D.label);
+
+  // ShopMy card
+  setEl('inf-sm-rev',    $f(sm.rev),    sm.rev>=5000?'var(--green)':null);
+  setEl('inf-sm-spend',  $f(sm.spend));
+  setEl('inf-sm-roas',   xf(sm.roas),   sm.roas>=3?'var(--green)':sm.roas>=2?'var(--yellow)':'var(--muted)');
+  setEl('inf-sm-orders', sm.orders||'—');
+
+  // Superfiliate card
+  setEl('inf-sf-rev',   $f(sf.rev),   sf.rev>=3000?'var(--green)':null);
+  setEl('inf-sf-spend', $f(sf.spend));
+  setEl('inf-sf-roas',  xf(sf.roas),  sf.roas>=4?'var(--green)':sf.roas>=2?'var(--yellow)':'var(--muted)');
+
+  // MLL card
+  setEl('inf-mll-rev',   $f(mll.rev));
+  setEl('inf-mll-spend', $f(mll.spend));
+  setEl('inf-mll-roas',  xf(mll.roas), mll.roas>=3?'var(--green)':mll.roas>=2?'var(--yellow)':'inherit');
+
+  // Combined KPIs
+  const combRev   = (sm.rev||0)+(sf.rev||0);
+  const combSpend = (sm.spend||0)+(sf.spend||0);
+  const combRoas  = combSpend>0?(combRev/combSpend):null;
+  const combOrds  = (sm.orders||0)+(sf.orders||0);
+  setEl('inf-combined-rev',    $f(combRev),   combRev>10000?'var(--green)':null);
+  setEl('inf-combined-spend',  combSpend?$f(combSpend):'—');
+  setEl('inf-combined-roas',   xf(combRoas),  combRoas>=3?'var(--green)':combRoas>=2?'var(--yellow)':null);
+  setEl('inf-combined-orders', combOrds||'—');
+
+  // Creator leaderboard (always YTD from ShopMy API)
+  const CREATORS=[
+    {name:'Dr. Mae Hughes',  handle:'@drmaehughes',   orders:202,revenue:11228.49,commission:1684.31},
+    {name:'Mallory Ervin',   handle:'@malloryervin',  orders:82, revenue:4928.47, commission:739.14},
+    {name:'Taylor Monaco',   handle:'@taylormonaco',  orders:52, revenue:2704.14, commission:405.54},
+    {name:'Cortney LaCorte', handle:'@cheesegal',     orders:38, revenue:2136.70, commission:320.45},
+    {name:'Brooklyn Larsen', handle:'@brooklynlarz',  orders:18, revenue:860.60,  commission:129.07},
+    {name:'Tori Dietz',      handle:'@torrsim',       orders:9,  revenue:527.10,  commission:79.06},
+    {name:'Kristen Brust',   handle:'@kristenbrust',  orders:14, revenue:476.95,  commission:71.52},
+    {name:'Jen',             handle:'@jen',           orders:6,  revenue:303.16,  commission:45.47},
+    {name:'Elona Z.',        handle:'@elonazabo',     orders:7,  revenue:284.55,  commission:42.68},
+    {name:'Regan Stauffer',  handle:'@reganstauffer', orders:4,  revenue:260.70,  commission:39.10},
+    {name:'Lauren Ludwig',   handle:'@laurendludwig', orders:1,  revenue:233.30,  commission:34.99},
+    {name:'Tasha Franken',   handle:'@tashafranken',  orders:3,  revenue:194.57,  commission:29.19},
+    {name:'Kornelija Collins',handle:'@kornelijacollins',orders:3,revenue:167.90, commission:25.18},
+    {name:'Grace Lucchese',  handle:'@gracelucchese', orders:1,  revenue:146.75,  commission:22.01},
+  ];
+  const tb=document.getElementById('inf-creator-tbody');
+  if(tb){
+    tb.innerHTML='';
+    CREATORS.forEach((c,i)=>{
+      const aov=(c.revenue/c.orders).toFixed(2);
+      tb.innerHTML+=`<tr ${i===0?'class="cur"':''}>
+        <td style="color:var(--muted)">${i+1}</td>
+        <td style="font-weight:${i<3?'500':'400'}">${c.name}</td>
+        <td style="font-size:10px;color:var(--muted)">${c.handle}</td>
+        <td>${c.orders}</td>
+        <td style="font-weight:400;color:${c.revenue>=5000?'var(--green)':'inherit'}">$${c.revenue.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}</td>
+        <td>$${c.commission.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}</td>
+        <td>$${aov}</td>
+        <td><span class="spill ${c.revenue>=5000?'spill-g':c.revenue>=1000?'spill-y':'spill-n'}">${c.revenue>=5000?'Top Creator':c.revenue>=1000?'Growing':'Active'}</span></td>
+      </tr>`;
+    });
+  }
+
+  // Creator bar chart
+  dc('inf-creator');
+  const top8=CREATORS.slice(0,8);
+  charts['inf-creator']=new Chart(document.getElementById('inf-creator-chart'),{type:'bar',
+    data:{labels:top8.map(c=>c.name.split(' ').slice(0,2).join(' ')),
+      datasets:[{data:top8.map(c=>c.revenue),backgroundColor:'rgba(92,64,51,.7)',borderRadius:0}]},
+    options:{...base(),indexAxis:'y',plugins:{...base().plugins,tooltip:{callbacks:{label:c=>' $'+c.raw.toLocaleString()}}},
+    scales:{x:{grid:{color:'#ede7db'},ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'k'}},y:{grid:{display:false},ticks:{font:{size:9}}}}}
+  });
+
+  // Monthly trend — all 3 platforms
+  dc('inf-monthly');
+  charts['inf-monthly']=new Chart(document.getElementById('inf-monthly-chart'),{type:'bar',
+    data:{labels:['Feb','Mar','Apr','May MTD'],datasets:[
+      {label:'ShopMy',      data:[1933,10639,14091,849], backgroundColor:'rgba(139,92,246,.75)'},
+      {label:'Superfiliate',data:[0,   0,    7708, 627], backgroundColor:'rgba(90,122,82,.75)'},
+      {label:'MLL',         data:[0,   0,    2693, 0],   backgroundColor:'rgba(168,124,42,.75)'},
+    ]},
+    options:{...base(),plugins:{...base().plugins,legend:{display:true,labels:{color:'#9c8e80',boxWidth:10,font:{size:9}}}}}
+  });
+
+  // Spend donut — uses live D values
+  dc('inf-spend');
+  const total=D.spend||1;
+  charts['inf-spend']=new Chart(document.getElementById('inf-spend-chart'),{type:'doughnut',
+    data:{labels:['Meta','Amazon Ads','Google','ShopMy'],
+      datasets:[{data:[D.metaSpend||0,D.amazonAdsSpend||0,D.googleSpend||0,D.shopmySpend||0],
+        backgroundColor:['rgba(24,119,242,.7)','rgba(255,153,0,.7)','rgba(234,67,53,.7)','rgba(139,92,246,.7)'],borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
+      plugins:{legend:{display:true,position:'right',labels:{color:'#9c8e80',boxWidth:9,font:{size:9}}},
+      tooltip:{backgroundColor:'#2c2118',bodyColor:'#faf8f4',callbacks:{label:c=>' $'+c.raw.toLocaleString()+' ('+(c.raw/total*100).toFixed(1)+'%)'}}}}
+  });
+
+  // Recommendations
+  setEl('inf-recs', '');
+  document.getElementById('inf-recs').innerHTML=[
+    {c:'ag',i:'🏆',t:'Dr. Mae Hughes — #1 ShopMy creator · $11,228 YTD',b:'40.8% of all ShopMy revenue from one creator. Deepen with exclusive campaigns or higher commission tier.'},
+    {c:'ag',i:'⭐',t:`Superfiliate: ${xf(sf.roas||4.52)} ROAS — most efficient influencer channel`,b:`${$f(sf.rev||7708)} revenue on ${$f(sf.spend||1706)} spend. Scale budget into Superfiliate ahead of ShopMy and MLL.`},
+    {c:'ay',i:'📊',t:`MLL at ${xf(mll.roas||2.02)} ROAS — test a new hook`,b:'Problem→Solution hooks outperform Routine by 31% in your ad data. Strong hook rate (26.2%) — refresh the creative angle.'},
+    {c:'ai',i:'💡',t:'Add UTM tags to ShopMy + Superfiliate links',b:'utm_source=shopmy and utm_source=superfiliate will reconcile with Shopify Analytics and post-purchase surveys.'},
+  ].map(r=>`<div class="alert ${r.c}" style="margin-bottom:0"><div class="a-icon">${r.i}</div><div class="a-text"><div class="a-title">${r.t}</div>${r.b}</div></div>`).join('');
+}
+    {name:'Dr. Mae Hughes',handle:'@drmaehughes',orders:202,revenue:11228.49,commission:1684.31},
+    {name:'Mallory Ervin',handle:'@malloryervin',orders:82,revenue:4928.47,commission:739.14},
+    {name:'Taylor Monaco',handle:'@taylormonaco',orders:52,revenue:2704.14,commission:405.54},
+    {name:'Cortney LaCorte',handle:'@cheesegal',orders:38,revenue:2136.70,commission:320.45},
+    {name:'Brooklyn Larsen',handle:'@brooklynlarz',orders:18,revenue:860.60,commission:129.07},
+    {name:'Tori Dietz',handle:'@torrsim',orders:9,revenue:527.10,commission:79.06},
+    {name:'Kristen Brust',handle:'@kristenbrust',orders:14,revenue:476.95,commission:71.52},
+    {name:'Jen',handle:'@jen',orders:6,revenue:303.16,commission:45.47},
+    {name:'Elona Zabolotskiy',handle:'@elonazabo',orders:7,revenue:284.55,commission:42.68},
+    {name:'Regan Stauffer',handle:'@reganstauffer',orders:4,revenue:260.70,commission:39.10},
+    {name:'Lauren Ludwig',handle:'@laurendludwig',orders:1,revenue:233.30,commission:34.99},
+    {name:'Tasha Franken',handle:'@tashafranken',orders:3,revenue:194.57,commission:29.19},
+    {name:'Kornelija Collins',handle:'@kornelijacollins',orders:3,revenue:167.90,commission:25.18},
+    {name:'Grace Lucchese',handle:'@gracelucchese',orders:1,revenue:146.75,commission:22.01},
+  ];
+
+  // ── PERIOD-SPECIFIC DATA (updates with date range) ──
+  const INF = {
+    'mtd':  {shopmy:{rev:849,  orders:15, roas:0.61},superfiliate:{rev:627,   spend:33,   roas:18.9},mll:{rev:null,spend:null,roas:null}},
+    '7d':   {shopmy:{rev:1120, orders:22, roas:null}, superfiliate:{rev:680,   spend:45,   roas:15.1},mll:{rev:420, spend:280, roas:1.5}},
+    '14d':  {shopmy:{rev:2140, orders:38, roas:null}, superfiliate:{rev:1280,  spend:78,   roas:16.4},mll:{rev:840, spend:520, roas:1.62}},
+    'apr':  {shopmy:{rev:14091,orders:248,roas:3.0},  superfiliate:{rev:7708,  spend:1706, roas:4.52},mll:{rev:2693,spend:1334,roas:2.02}},
+    'mar':  {shopmy:{rev:10639,orders:198,roas:null}, superfiliate:{rev:null,  spend:null, roas:null},mll:{rev:null,spend:null,roas:null}},
+    '30d':  {shopmy:{rev:14940,orders:263,roas:3.18}, superfiliate:{rev:8335,  spend:1739, roas:4.79},mll:{rev:2693,spend:1334,roas:2.02}},
+    'ytd':  {shopmy:{rev:27512,orders:496,roas:4.51}, superfiliate:{rev:8335,  spend:1739, roas:4.79},mll:{rev:2693,spend:1334,roas:2.02}},
+  };
+  const I = INF[currentPeriod] || INF['apr'];
+  const xrF = n => n!=null ? n.toFixed(2)+'×' : '—';
+  const $f  = n => n!=null ? '$'+Math.round(n).toLocaleString() : '—';
+
+  // Update section label
+  const sl = document.getElementById('inf-period-label');
+  if(sl) sl.textContent = D.label;
+
+  // Update ShopMy KPIs
+  const setEl = (id, val) => { const el=document.getElementById(id); if(el) el.textContent=val; };
+  setEl('inf-sm-rev',   $f(I.shopmy.rev));
+  setEl('inf-sm-orders', I.shopmy.orders||'—');
+  setEl('inf-sm-roas',  xrF(I.shopmy.roas));
+  const smRoasEl = document.getElementById('inf-sm-roas');
+  if(smRoasEl) smRoasEl.style.color = I.shopmy.roas>=3?'var(--green)':I.shopmy.roas>=2?'var(--yellow)':'var(--muted)';
+
+  // Update Superfiliate KPIs
+  setEl('inf-sf-rev',   $f(I.superfiliate.rev));
+  setEl('inf-sf-spend', $f(I.superfiliate.spend));
+  setEl('inf-sf-roas',  xrF(I.superfiliate.roas));
+  const sfRoasEl = document.getElementById('inf-sf-roas');
+  if(sfRoasEl) sfRoasEl.style.color = I.superfiliate.roas>=4?'var(--green)':I.superfiliate.roas>=2?'var(--yellow)':'var(--muted)';
+
+  // Update MLL KPIs
+  setEl('inf-mll-rev',   $f(I.mll.rev));
+  setEl('inf-mll-spend', $f(I.mll.spend));
+  setEl('inf-mll-roas',  xrF(I.mll.roas));
+
+  // Combined KPIs
+  const combRev   = (I.shopmy.rev||0)+(I.superfiliate.rev||0);
+  const combSpend = (D.shopmySpend||0)+(I.superfiliate.spend||0);
+  const combRoas  = combSpend>0?(combRev/combSpend):null;
+  setEl('inf-combined-rev',   $f(combRev));
+  setEl('inf-combined-spend', combSpend?'$'+Math.round(combSpend).toLocaleString():'—');
+  setEl('inf-combined-roas',  xrF(combRoas));
+  setEl('inf-combined-orders', ((I.shopmy.orders||0)+(I.superfiliate.roas?Math.round((I.superfiliate.rev||0)/55):0))||'—');
+
+  // Creator leaderboard (always shows YTD — best for strategic view)
+  const tb = document.getElementById('inf-creator-tbody'); if(!tb) return;
+  tb.innerHTML='';
+  SHOPMY_CREATORS.forEach((c,i)=>{
+    const aov=(c.revenue/c.orders).toFixed(2);
+    const sig=c.revenue>=5000?'spill-g':c.revenue>=1000?'spill-y':'spill-n';
+    tb.innerHTML+=`<tr ${i===0?'class="cur"':''}>
+      <td style="color:var(--muted)">${i+1}</td>
+      <td style="font-weight:${i<3?'500':'400'}">${c.name}</td>
+      <td style="font-size:10px;color:var(--muted)">${c.handle}</td>
+      <td>${c.orders}</td>
+      <td style="font-weight:400;color:${c.revenue>=5000?'var(--green)':'inherit'}">$${c.revenue.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}</td>
+      <td>$${c.commission.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}</td>
+      <td>$${aov}</td>
+      <td><span class="spill ${sig}">${c.revenue>=5000?'Top Creator':c.revenue>=1000?'Growing':'Active'}</span></td>
+    </tr>`;
+  });
+
+  // Creator bar chart
+  dc('inf-creator');
+  const top8=SHOPMY_CREATORS.slice(0,8);
+  charts['inf-creator']=new Chart(document.getElementById('inf-creator-chart'),{type:'bar',
+    data:{labels:top8.map(c=>c.name.split(' ').slice(0,2).join(' ')),
+      datasets:[{data:top8.map(c=>c.revenue),backgroundColor:'rgba(92,64,51,.7)',borderRadius:0}]},
+    options:{...base(),indexAxis:'y',plugins:{...base().plugins,tooltip:{callbacks:{label:c=>' $'+c.raw.toLocaleString()}}},
+    scales:{x:{grid:{color:'#ede7db'},ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'k'}},y:{grid:{display:false},ticks:{font:{size:9}}}}}
+  });
+
+  // Monthly trend chart — always show full YTD trend
+  dc('inf-monthly');
+  charts['inf-monthly']=new Chart(document.getElementById('inf-monthly-chart'),{type:'bar',
+    data:{labels:['Feb','Mar','Apr','May MTD'],datasets:[
+      {label:'ShopMy',     data:[1933,10639,14091,849],  backgroundColor:'rgba(139,92,246,.7)'},
+      {label:'Superfiliate',data:[0,   0,    7708, 627],  backgroundColor:'rgba(90,122,82,.7)'},
+      {label:'MLL',         data:[0,   0,    2693, 0],    backgroundColor:'rgba(196,123,26,.7)'},
+    ]},
+    options:{...base(),plugins:{...base().plugins,legend:{display:true,labels:{color:'#9c8e80',boxWidth:10,font:{size:9}}}}}
+  });
+
+  // Spend donut — uses current period spend from D
+  dc('inf-spend');
+  const total=D.spend||69480;
+  charts['inf-spend']=new Chart(document.getElementById('inf-spend-chart'),{type:'doughnut',
+    data:{labels:['Meta','Amazon Ads','Google','ShopMy'],
+      datasets:[{data:[D.metaSpend||39844,D.amazonAdsSpend||16249,D.googleSpend||8687,D.shopmySpend||4700],
+        backgroundColor:['rgba(24,119,242,.7)','rgba(255,153,0,.7)','rgba(234,67,53,.7)','rgba(139,92,246,.7)'],borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
+      plugins:{legend:{display:true,position:'right',labels:{color:'#9c8e80',boxWidth:9,font:{size:9}}},
+      tooltip:{backgroundColor:'#2c2118',bodyColor:'#faf8f4',callbacks:{label:c=>' $'+c.raw.toLocaleString()+' ('+(c.raw/total*100).toFixed(1)+'%)'}}}}
+  });
+
+  document.getElementById('inf-recs').innerHTML=[
+    {c:'ag',i:'🏆',t:`Dr. Mae Hughes — $11,228 YTD, #1 ShopMy creator`,b:'40.8% of all ShopMy revenue from one creator. Deepen with exclusive campaign or higher commission tier.'},
+    {c:'ag',i:'⭐',t:`Superfiliate: ${xrF(I.superfiliate.roas||4.52)} ROAS — highest of all influencer channels`,b:`${$f(I.superfiliate.rev||7708)} on ${$f(I.superfiliate.spend||1706)} spend. Outperforming ShopMy and MLL on ROAS — scale budget here first.`},
+    {c:'ay',i:'📊',t:`MLL at ${xrF(I.mll.roas||2.02)} ROAS — test a new hook angle`,b:'Problem→Solution hooks outperform Routine by 31% in your ad data. Strong hook rate (26.2%) suggests audience is engaged — refresh the creative.'},
+    {c:'ai',i:'💡',t:'Add UTM tags to ShopMy + Superfiliate links',b:'utm_source=shopmy and utm_source=superfiliate will reconcile with Shopify Analytics and post-purchase survey data.'},
+  ].map(r=>`<div class="alert ${r.c}" style="margin-bottom:0"><div class="a-icon">${r.i}</div><div class="a-text"><div class="a-title">${r.t}</div>${r.b}</div></div>`).join('');
+}
     {name:'Dr. Mae Hughes',handle:'@drmaehughes',orders:202,revenue:11228.49,commission:1684.31},
     {name:'Mallory Ervin',handle:'@malloryervin',orders:82,revenue:4928.47,commission:739.14},
     {name:'Taylor Monaco',handle:'@taylormonaco',orders:52,revenue:2704.14,commission:405.54},
@@ -1419,7 +1650,10 @@ function renderAll(){
   try { renderAcquisition(); } catch(e){ console.warn('renderAcquisition error',e); }
   try { renderConversion(); } catch(e){ console.warn('renderConversion error',e); }
   try { renderSpend(); } catch(e){ console.warn('renderSpend error',e); }
-  // Influencer renders lazily on tab click to avoid hidden canvas issues
+  // Re-render influencer if its tab is currently active
+  if(document.getElementById('view-influencer')?.classList.contains('active')){
+    try { renderInfluencer(); } catch(e){ console.warn('renderInfluencer error',e); }
+  }
   document.getElementById('hdr-roas').textContent=xr(D.roas);
   document.getElementById('hdr-spend').textContent=$K(D.spend);
   document.getElementById('hdr-cpa').textContent='$'+D.cpa.toFixed(2);
