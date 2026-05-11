@@ -974,6 +974,19 @@ const PERIODS = {
 let D = PERIODS['mtd'];
 let currentPeriod = 'mtd';
 
+// ── LIVE DATA: fetch dashboard-data.json and replace MTD on load ──
+fetch('/dashboard-data.json')
+  .then(r => r.json())
+  .then(live => {
+    PERIODS['mtd'] = live;
+    if (currentPeriod === 'mtd') {
+      D = live;
+      document.getElementById('dinfo').textContent = live.label;
+      renderAll();
+    }
+  })
+  .catch(() => {}); // silently keep hardcoded fallback if fetch fails
+
 const $K=n=>n==null?'—':n>=1e6?'$'+(n/1e6).toFixed(1)+'M':n>=1000?'$'+(n/1000).toFixed(0)+'K':'$'+Math.round(n).toLocaleString();
 const $F=n=>'$'+Math.round(n).toLocaleString();
 const pctFmt=n=>n==null?'—':(n<1?(n*100).toFixed(1):n.toFixed(1))+'%';
