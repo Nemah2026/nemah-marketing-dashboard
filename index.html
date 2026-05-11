@@ -1430,6 +1430,8 @@ function renderInfluencer(){
     {c:'ai',i:'💡',t:'Add UTM tags to ShopMy + Superfiliate links',b:'utm_source=shopmy and utm_source=superfiliate will reconcile with Shopify Analytics and post-purchase surveys.'},
   ].map(r=>`<div class="alert ${r.c}" style="margin-bottom:0"><div class="a-icon">${r.i}</div><div class="a-text"><div class="a-title">${r.t}</div>${r.b}</div></div>`).join('');
 }
+
+const SHOPMY_CREATORS = [
     {name:'Dr. Mae Hughes',handle:'@drmaehughes',orders:202,revenue:11228.49,commission:1684.31},
     {name:'Mallory Ervin',handle:'@malloryervin',orders:82,revenue:4928.47,commission:739.14},
     {name:'Taylor Monaco',handle:'@taylormonaco',orders:52,revenue:2704.14,commission:405.54},
@@ -1444,8 +1446,9 @@ function renderInfluencer(){
     {name:'Tasha Franken',handle:'@tashafranken',orders:3,revenue:194.57,commission:29.19},
     {name:'Kornelija Collins',handle:'@kornelijacollins',orders:3,revenue:167.90,commission:25.18},
     {name:'Grace Lucchese',handle:'@gracelucchese',orders:1,revenue:146.75,commission:22.01},
-  ];
+];
 
+function renderInfluencer(){
   // ── PERIOD-SPECIFIC DATA (updates with date range) ──
   const INF = {
     'mtd':  {shopmy:{rev:849,  orders:15, roas:0.61},superfiliate:{rev:627,   spend:33,   roas:18.9},mll:{rev:null,spend:null,roas:null}},
@@ -1551,21 +1554,8 @@ function renderInfluencer(){
     {c:'ai',i:'💡',t:'Add UTM tags to ShopMy + Superfiliate links',b:'utm_source=shopmy and utm_source=superfiliate will reconcile with Shopify Analytics and post-purchase survey data.'},
   ].map(r=>`<div class="alert ${r.c}" style="margin-bottom:0"><div class="a-icon">${r.i}</div><div class="a-text"><div class="a-title">${r.t}</div>${r.b}</div></div>`).join('');
 }
-    {name:'Dr. Mae Hughes',handle:'@drmaehughes',orders:202,revenue:11228.49,commission:1684.31},
-    {name:'Mallory Ervin',handle:'@malloryervin',orders:82,revenue:4928.47,commission:739.14},
-    {name:'Taylor Monaco',handle:'@taylormonaco',orders:52,revenue:2704.14,commission:405.54},
-    {name:'Cortney LaCorte',handle:'@cheesegal',orders:38,revenue:2136.70,commission:320.45},
-    {name:'Brooklyn Larsen',handle:'@brooklynlarz',orders:18,revenue:860.60,commission:129.07},
-    {name:'Tori Dietz',handle:'@torrsim',orders:9,revenue:527.10,commission:79.06},
-    {name:'Kristen Brust',handle:'@kristenbrust',orders:14,revenue:476.95,commission:71.52},
-    {name:'Jen',handle:'@jen',orders:6,revenue:303.16,commission:45.47},
-    {name:'Elona Zabolotskiy',handle:'@elonazabo',orders:7,revenue:284.55,commission:42.68},
-    {name:'Regan Stauffer',handle:'@reganstauffer',orders:4,revenue:260.70,commission:39.10},
-    {name:'Lauren Ludwig',handle:'@laurendludwig',orders:1,revenue:233.30,commission:34.99},
-    {name:'Tasha Franken',handle:'@tashafranken',orders:3,revenue:194.57,commission:29.19},
-    {name:'Kornelija Collins',handle:'@kornelijacollins',orders:3,revenue:167.90,commission:25.18},
-    {name:'Grace Lucchese',handle:'@gracelucchese',orders:1,revenue:146.75,commission:22.01},
-  ];
+
+function renderInfluencer2(){
   const MONTHLY = [
     {month:'Feb',orders:35, revenue:1933.11, commission:289.93},
     {month:'Mar',orders:198,revenue:10638.56,commission:1601.27},
