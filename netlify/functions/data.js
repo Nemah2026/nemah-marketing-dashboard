@@ -1,5 +1,5 @@
 // netlify/functions/data.js
-// Fetches Triple Whale (ads/creative) + Klaviyo (email) data
+// Fetches Triple Whale (ads/creative) + Klaviyo (email) + Shopify data
 
 export async function handler(event) {
   const headers = {
@@ -30,28 +30,68 @@ export async function handler(event) {
   }
 }
 
+// ── Triple Whale: summary-page API (native, no Moby credits needed) ────────
 async function fetchTripleWhale(from, to) {
   const TW_API_KEY = process.env.TRIPLEWHALE_API_KEY;
-  const SHOP_ID = process.env.TW_SHOP_ID || "nemah-company.myshopify.com";
+  const SHOP_DOMAIN = process.env.TW_SHOP_ID || "nemah-company.myshopify.com";
 
   if (!TW_API_KEY) return getMockTWData();
 
+  const today = new Date().toISOString().split("T")[0];
+  const start = from
+    ? from.split("T")[0]
+    : new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split("T")[0];
+  const end = to ? to.split("T")[0] : today;
+
+  const body = { shopDomain: SHOP_DOMAIN, period: { start, end } };
+  if (end >= today) {
+    body.todayHour = new Date().getUTCHours();
+  }
+
   try {
-    const questions = [
-      `What is my total ad spend, blended ROAS, CPA, Meta spend, Meta ROAS, Google spend, Google ROAS from ${from} to ${to}?`,
-      `What are my top 5 ads by spend from ${from} to ${to} with ad name, spend, ROAS, CTR, impressions?`,
-      `What is my Meta video vs image ROAS and CTR breakdown from ${from} to ${to}?`
-    ];
+    const res = await fetch("https://api.triplewhale.com/api/v2/summary-page/get-data", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-api-key": TW_API_KEY },
+      body: JSON.stringify(body)
+    });
 
-    const results = await Promise.all(questions.map(question =>
-      fetch("https://api.triplewhale.com/willy/moby-chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "x-api-key": TW_API_KEY },
-        body: JSON.stringify({ shopId: SHOP_ID, question })
-      }).then(r => r.json()).catch(() => null)
-    ));
+    if (!res.ok) return getMockTWData();
 
-    return { raw: results, source: "triplewhale_api" };
+    const data = await res.json();
+
+    // Build lookup map: metricId → current value
+    const map = {};
+    (data.metrics || []).forEach(m => {
+      map[m.id] = m.values?.current ?? null;
+    });
+
+    return {
+      source: "triplewhale_api",
+      period: `${start} → ${end}`,
+      total_ad_spend:    map.blendedAds          ?? null,
+      blended_roas:      map.roas                ?? null,
+      blended_cpa:       map.totalCpa            ?? null,
+      mer:               map.mer                 ?? null,
+      meta_spend:        map.facebookAds         ?? null,
+      meta_roas:         map.facebookRoas        ?? null,
+      meta_cpa:          map.facebookCpa         ?? null,
+      meta_purchases:    map.facebookPurchases   ?? null,
+      meta_ctr:          map.facebookCtr         ?? null,
+      meta_cpc:          map.facebookCpc         ?? null,
+      meta_impressions:  map.facebookImpressions ?? null,
+      google_spend:      map.googleAds           ?? null,
+      google_roas:       map.googleRoas          ?? null,
+      google_cpa:        map.googleAllCpa        ?? null,
+      google_ctr:        map.totalGoogleAdsCtr   ?? null,
+      amazon_sales:      map.amazonSales         ?? null,
+      amazon_spend:      map.amazonAds           ?? null,
+      amazon_roas:       map.amazonROAS          ?? null,
+      amazon_tacos:      map.amazonTACos         ?? null,
+      new_customer_rev:  map.newCustomerSales    ?? null,
+      new_customers_pct: map.newCustomersPercent ?? null,
+      aov:               map.shopifyAov          ?? null,
+      gross_profit:      map.grossProfit         ?? null,
+    };
   } catch (e) {
     return getMockTWData();
   }
@@ -62,14 +102,54 @@ async function fetchKlaviyo(from, to) {
   if (!KLAVIYO_KEY) return getMockKlaviyoData();
 
   try {
-    const sinceDate = new Date(from).toISOString();
+    // Step 1: fetch campaigns (sent email only, newest first)
     const campaignsRes = await fetch(
-      `https://a.klaviyo.com/api/campaigns?filter=equals(status,"Sent")&fields[campaign]=name,status,send_time&include=campaign-messages`,
+      `https://a.klaviyo.com/api/campaigns?filter=and(equals(messages.channel,"email"),equals(status,"Sent"))&sort=-created_at&fields[campaign]=name,status,send_time&page[size]=25`,
       { headers: { "Authorization": `Klaviyo-API-Key ${KLAVIYO_KEY}`, "revision": "2024-10-15" } }
     );
     if (!campaignsRes.ok) return getMockKlaviyoData();
     const campaigns = await campaignsRes.json();
-    return { campaigns: campaigns.data?.slice(0, 10) || [], source: "klaviyo_api" };
+    const campaignList = campaigns.data || [];
+
+    // Step 2: fetch campaign stats
+    const statsRes = await fetch("https://a.klaviyo.com/api/campaign-values-reports", {
+      method: "POST",
+      headers: {
+        "Authorization": `Klaviyo-API-Key ${KLAVIYO_KEY}`,
+        "revision": "2024-10-15",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        data: {
+          type: "campaign-values-report",
+          attributes: {
+            statistics: ["opens", "open_rate", "clicks", "click_rate", "unsubscribes", "delivered", "revenue_per_recipient", "conversion_rate", "conversions"],
+            conversion_metric_id: "T8THMQ",
+            timeframe: { key: "last_12_months" }
+          }
+        }
+      })
+    });
+
+    const statsMap = {};
+    if (statsRes.ok) {
+      const statsData = await statsRes.json();
+      const results = statsData?.data?.attributes?.results || [];
+      results.forEach(r => {
+        const id = r.groupings?.campaign_id;
+        if (id) statsMap[id] = r.statistics || {};
+      });
+    }
+
+    // Merge stats into campaigns
+    const enriched = campaignList.slice(0, 15).map(c => ({
+      id: c.id,
+      name: c.attributes?.name,
+      send_time: c.attributes?.send_time,
+      stats: statsMap[c.id] || {}
+    }));
+
+    return { campaigns: enriched, source: "klaviyo_api" };
   } catch (e) {
     return getMockKlaviyoData();
   }
@@ -103,17 +183,10 @@ async function fetchShopifyAnalytics(from, to) {
 
 function getMockTWData() {
   return {
-    total_ad_spend: 54440, blended_roas: 2.50, pixel_roas: 4.02, cpa: 28.05,
+    total_ad_spend: 54440, blended_roas: 2.50, blended_cpa: 28.05,
     meta_spend: 37856, meta_roas: 1.76, meta_cpa: 39.11,
     google_spend: 8095, google_roas: 6.22, google_cpa: 11.66,
-    video_roas: 1.68, video_ctr: 0.0152, image_roas: 1.18, image_ctr: 0.0079,
-    top_ads: [
-      { name: "UGC Scar Demo — Mary 30sec", channel: "meta", spend: 6390, roas: 1.18, ctr: 0.0181, impressions: 228900 },
-      { name: "Google Ads Campaign 751358743892", channel: "google", spend: 6220, roas: 2.01, ctr: 0.0052, impressions: 709459 },
-      { name: "Motherhood Creative — Ad Set B", channel: "meta", spend: 4922, roas: 2.29, ctr: 0.0189, impressions: 260726 },
-      { name: "Motherhood Creative — Ad Set A", channel: "meta", spend: 6128, roas: 1.56, ctr: 0.0123, impressions: 280247 },
-      { name: "Skin Spray — Gabby Kerr UGC", channel: "meta", spend: 1350, roas: 1.02, ctr: 0.0289, impressions: 57136 }
-    ],
+    amazon_sales: 79873, amazon_spend: 4489, amazon_roas: 17.80,
     source: "cached"
   };
 }
@@ -121,11 +194,11 @@ function getMockTWData() {
 function getMockKlaviyoData() {
   return {
     campaigns: [
-      { id: "1", attributes: { name: "Mothers Day Email 4", send_time: "2026-05-03", definition: { content: { subject: "One week left to treat her (and yourself)" } } } },
-      { id: "2", attributes: { name: "Mothers Day Sale #2", send_time: "2026-04-29", definition: { content: { subject: "Let's Celebrate Mama 🌸 25% OFF" } } } },
-      { id: "3", attributes: { name: "Mother's Day Sale Email 1", send_time: "2026-04-28", definition: { content: { subject: "25% Off All Mom Products" } } } },
-      { id: "4", attributes: { name: "Stretch or Belly?", send_time: "2026-04-20", definition: { content: { subject: "Cream or oil — which one is actually working?" } } } },
-      { id: "5", attributes: { name: "Firming Serum Q&A", send_time: "2026-04-17", definition: { content: { subject: "Your Firming Body Serum Questions, Answered" } } } }
+      { id: "1", name: "Mothers Day Email 4", send_time: "2026-05-03", stats: {} },
+      { id: "2", name: "Mothers Day Sale #2", send_time: "2026-04-29", stats: {} },
+      { id: "3", name: "Mother's Day Sale Email 1", send_time: "2026-04-28", stats: {} },
+      { id: "4", name: "Stretch or Belly?", send_time: "2026-04-20", stats: {} },
+      { id: "5", name: "Firming Serum Q&A", send_time: "2026-04-17", stats: {} }
     ],
     source: "cached"
   };
